@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>GRAVAX · Retro9000 Quest Board</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css"/>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html,body{min-height:100vh;background:#020a02;font-family:'Syne',sans-serif;color:#e8f5e8;display:flex;align-items:center;justify-content:center;padding:24px;}
+  .app{background:#050f05;border-radius:16px;overflow:hidden;width:100%;max-width:680px;}
+  .hero-band{background:#050f05;padding:20px 24px 16px;border-bottom:1px solid #1a3a1a;display:flex;justify-content:space-between;align-items:center;}
+  .brand{display:flex;align-items:center;gap:10px;}
+  .brand-icon{width:32px;height:32px;background:#22c55e;border-radius:7px;display:flex;align-items:center;justify-content:center;}
+  .brand-icon svg{width:20px;height:20px;fill:#050f05;}
+  .brand-name{font-size:16px;font-weight:700;color:#fff;letter-spacing:0.04em;}
+  .brand-sub{font-size:10px;color:#4ade80;letter-spacing:0.12em;text-transform:uppercase;font-family:'Space Mono',monospace;}
+  .net-badge{display:flex;align-items:center;gap:6px;padding:6px 12px;border:1px solid #1a4d1a;border-radius:20px;background:#0a1f0a;}
+  .net-dot{width:7px;height:7px;border-radius:50%;background:#22c55e;animation:blink 2s infinite;}
+  @keyframes blink{0%,100%{opacity:1;}50%{opacity:0.3;}}
+  .net-label{font-size:11px;color:#4ade80;font-family:'Space Mono',monospace;}
+  .hero-section{background:#050f05;padding:24px 24px 20px;position:relative;overflow:hidden;border-bottom:1px solid #1a3a1a;}
+  .grid-lines{position:absolute;bottom:0;left:0;right:0;height:80px;opacity:0.18;}
+  .hero-tagline{font-size:11px;color:#4ade80;letter-spacing:0.15em;text-transform:uppercase;font-family:'Space Mono',monospace;margin-bottom:8px;}
+  .hero-title{font-size:28px;font-weight:800;color:#fff;line-height:1.1;margin-bottom:16px;}
+  .hero-title span{color:#22c55e;}
+  .hero-stats{display:flex;gap:24px;position:relative;z-index:1;}
+  .hstat-n{font-size:22px;font-weight:700;color:#22c55e;font-family:'Space Mono',monospace;}
+  .hstat-l{font-size:10px;color:#4a7a4a;text-transform:uppercase;letter-spacing:0.08em;}
+  .progress-row{margin:0 24px;padding:12px 0;border-bottom:1px solid #1a3a1a;}
+  .prog-label{display:flex;justify-content:space-between;margin-bottom:6px;}
+  .prog-label span{font-size:11px;color:#4a7a4a;font-family:'Space Mono',monospace;text-transform:uppercase;letter-spacing:0.06em;}
+  .prog-label strong{font-size:11px;color:#4ade80;font-family:'Space Mono',monospace;}
+  .prog-track{height:4px;background:#0f2a0f;border-radius:2px;overflow:hidden;}
+  .prog-fill{height:100%;background:#22c55e;border-radius:2px;transition:width 0.6s ease;}
+  .quests-wrap{padding:16px 24px 24px;}
+  .sec-label{font-size:10px;color:#4a7a4a;text-transform:uppercase;letter-spacing:0.12em;font-family:'Space Mono',monospace;margin-bottom:12px;}
+  .quest{background:#0a1a0a;border:1px solid #1a3a1a;border-radius:12px;padding:14px 16px;margin-bottom:8px;display:flex;align-items:center;gap:14px;transition:border-color 0.2s;}
+  .quest:hover{border-color:#22c55e44;}
+  .quest.done{border-color:#22c55e55;background:#0a1f0a;}
+  .quest.locked{opacity:0.4;pointer-events:none;}
+  .q-num{width:32px;height:32px;border-radius:8px;background:#0f2a0f;border:1px solid #1a3a1a;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#22c55e;font-family:'Space Mono',monospace;flex-shrink:0;}
+  .quest.done .q-num{background:#22c55e;border-color:#22c55e;color:#050f05;}
+  .q-body{flex:1;min-width:0;}
+  .q-title{font-size:14px;font-weight:500;color:#e8f5e8;margin-bottom:2px;}
+  .q-desc{font-size:11px;color:#4a7a4a;font-family:'Space Mono',monospace;}
+  .q-reward{font-size:11px;color:#22c55e;font-family:'Space Mono',monospace;white-space:nowrap;margin-right:8px;font-weight:700;}
+  .q-btn{padding:7px 14px;border-radius:7px;border:1px solid #22c55e;background:transparent;color:#22c55e;cursor:pointer;font-size:12px;font-weight:700;font-family:'Syne',sans-serif;letter-spacing:0.04em;transition:all 0.15s;white-space:nowrap;}
+  .q-btn:hover{background:#22c55e;color:#050f05;}
+  .q-btn.done-btn{border-color:#22c55e55;color:#22c55e;cursor:default;display:flex;align-items:center;gap:4px;}
+  .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:100;align-items:center;justify-content:center;}
+  .modal-overlay.open{display:flex;}
+  .modal{background:#0a1a0a;border:1px solid #22c55e44;border-radius:14px;padding:24px;width:360px;max-width:92vw;}
+  .modal h3{font-size:16px;font-weight:700;color:#fff;margin-bottom:6px;}
+  .modal p{font-size:12px;color:#4a7a4a;font-family:'Space Mono',monospace;margin-bottom:14px;line-height:1.7;}
+  .modal-close{float:right;background:none;border:none;cursor:pointer;color:#4a7a4a;font-size:18px;margin-top:-4px;}
+  .modal-close:hover{color:#22c55e;}
+  .w-opt{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:8px;border:1px solid #1a3a1a;margin-bottom:8px;cursor:pointer;transition:all 0.15s;}
+  .w-opt:hover{border-color:#22c55e;background:#0f2a0f;}
+  .w-logo{width:34px;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;background:#0f2a0f;border:1px solid #1a3a1a;}
+  .w-name{font-size:13px;font-weight:500;color:#e8f5e8;}
+  .w-chain{font-size:10px;color:#4a7a4a;font-family:'Space Mono',monospace;}
+  .ext-link{display:block;text-align:center;padding:10px;background:#0f2a0f;border:1px solid #22c55e44;border-radius:8px;color:#4ade80;font-family:'Space Mono',monospace;font-size:12px;text-decoration:none;margin-bottom:14px;}
+  .ext-link:hover{border-color:#22c55e;background:#1a3a1a;}
+  .inp{width:100%;background:#050f05;border:1px solid #1a3a1a;border-radius:8px;padding:10px 12px;color:#e8f5e8;font-family:'Space Mono',monospace;font-size:12px;margin-bottom:12px;outline:none;}
+  .inp:focus{border-color:#22c55e;}
+  .inp::placeholder{color:#2a4a2a;}
+  .m-actions{display:flex;gap:8px;margin-top:4px;}
+  .m-cancel{flex:1;padding:9px;border-radius:8px;border:1px solid #1a3a1a;background:transparent;color:#4a7a4a;cursor:pointer;font-size:12px;font-family:'Syne',sans-serif;}
+  .m-cancel:hover{border-color:#22c55e44;color:#e8f5e8;}
+  .m-confirm{flex:1;padding:9px;border-radius:8px;border:1px solid #22c55e;background:#22c55e;color:#050f05;cursor:pointer;font-size:12px;font-weight:700;font-family:'Syne',sans-serif;}
+  .m-confirm:hover{background:#16a34a;}
+  .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(16px);background:#0a1f0a;border:1px solid #22c55e55;border-radius:8px;padding:10px 18px;font-size:12px;color:#4ade80;font-family:'Space Mono',monospace;display:flex;align-items:center;gap:8px;opacity:0;transition:all 0.3s;pointer-events:none;z-index:200;white-space:nowrap;}
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+</style>
+</head>
+<body>
+
+<div class="app">
+  <div class="hero-band">
+    <div class="brand">
+      <div class="brand-icon">
+        <svg viewBox="0 0 24 24"><path d="M12 3L4 8v8l8 5 8-5V8L12 3zm0 2.5l5.5 3.4v6.2L12 18.5l-5.5-3.4V8.9L12 5.5z"/></svg>
+      </div>
+      <div>
+        <div class="brand-name">GRAVAX</div>
+        <div class="brand-sub">Proof of Conservation</div>
+      </div>
+    </div>
+    <div class="net-badge">
+      <span class="net-dot"></span>
+      <span class="net-label">Avalanche C-Chain</span>
+    </div>
+  </div>
+
+  <div class="hero-section">
+    <svg class="grid-lines" viewBox="0 0 680 80" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 70 Q170 30 340 50 Q510 70 680 20" stroke="#22c55e" stroke-width="0.8" fill="none"/>
+      <path d="M0 80 Q170 45 340 60 Q510 80 680 35" stroke="#22c55e" stroke-width="0.5" fill="none"/>
+      <line x1="0" y1="75" x2="680" y2="75" stroke="#22c55e" stroke-width="0.3"/>
+      <line x1="85" y1="0" x2="85" y2="80" stroke="#22c55e" stroke-width="0.3"/>
+      <line x1="170" y1="0" x2="170" y2="80" stroke="#22c55e" stroke-width="0.3"/>
+      <line x1="255" y1="0" x2="255" y2="80" stroke="#22c55e" stroke-width="0.3"/>
+      <line x1="340" y1="0" x2="340" y2="80" stroke="#22c55e" stroke-width="0.3"/>
+      <line x1="425" y1="0" x2="425" y2="80" stroke="#22c55e" stroke-width="0.3"/>
+      <line x1="510" y1="0" x2="510" y2="80" stroke="#22c55e" stroke-width="0.3"/>
+      <line x1="595" y1="0" x2="595" y2="80" stroke="#22c55e" stroke-width="0.3"/>
+    </svg>
+    <div style="position:relative;z-index:1;">
+      <div class="hero-tagline">Conserve · Verify · Tokenize</div>
+      <div class="hero-title">Retro<span>9000</span><br>Quest Board</div>
+      <div class="hero-stats">
+        <div class="hstat"><div class="hstat-n" id="earnedN">0</div><div class="hstat-l">GRAVAX earned</div></div>
+        <div class="hstat"><div class="hstat-n" id="doneN">0/4</div><div class="hstat-l">Quests done</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="progress-row">
+    <div class="prog-label"><span>Progress</span><strong id="progPct">0%</strong></div>
+    <div class="prog-track"><div class="prog-fill" id="progFill" style="width:0%"></div></div>
+  </div>
+
+  <div class="quests-wrap">
+    <div class="sec-label">Active quests</div>
+    <div id="questList"></div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal" id="modalBox"></div>
+</div>
+
+<div class="toast" id="toast">
+  <i class="ti ti-check"></i>
+  <span id="toastMsg"></span>
+</div>
+
+<script>
+const Q=[
+  {id:'twitter',n:'01',title:'Follow @greenavax on X',desc:'Follow the official GreenAvax X account',reward:100,action:'Follow on X'},
+  {id:'wallet',n:'02',title:'Connect wallet to Retro9000',desc:'retro9000.avax.network · Avalanche C-Chain',reward:150,action:'Connect wallet'},
+  {id:'xlink',n:'03',title:'Link your X account to Retro9000',desc:'Authorize X login on retro9000.avax.network',reward:100,action:'Link X account'},
+  {id:'cchain',n:'04',title:'Paste your C-Chain address',desc:'Submit your 0x… Avalanche C-Chain address',reward:50,action:'Submit address'},
+];
+let done=new Set(),earned=0;
+
+function render(){
+  const list=document.getElementById('questList');
+  list.innerHTML='';
+  Q.forEach((q,i)=>{
+    const isDone=done.has(q.id);
+    const isLocked=i>0&&!done.has(Q[i-1].id);
+    const d=document.createElement('div');
+    d.className='quest'+(isDone?' done':'')+(isLocked?' locked':'');
+    d.innerHTML=`
+      <div class="q-num">${isDone?'<i class="ti ti-check" style="font-size:14px"></i>':q.n}</div>
+      <div class="q-body">
+        <div class="q-title">${q.title}</div>
+        <div class="q-desc">${q.desc}</div>
+      </div>
+      <div class="q-reward">+${q.reward} GRAVAX</div>
+      ${isDone
+        ?'<button class="q-btn done-btn"><i class="ti ti-check" style="font-size:12px"></i> Done</button>'
+        :`<button class="q-btn" onclick="startQuest('${q.id}')">${q.action}</button>`
+      }`;
+    list.appendChild(d);
+  });
+  const pct=Math.round(done.size/Q.length*100);
+  document.getElementById('earnedN').textContent=earned;
+  document.getElementById('doneN').textContent=done.size+'/'+Q.length;
+  document.getElementById('progFill').style.width=pct+'%';
+  document.getElementById('progPct').textContent=pct+'%';
+}
+
+function startQuest(id){
+  const modals={
+    twitter:`<button class="modal-close" onclick="closeModal()"><i class="ti ti-x"></i></button>
+      <h3>Follow @greenavax</h3>
+      <p>Follow the official GreenAvax account on X to earn 100 GRAVAX.</p>
+      <a class="ext-link" href="https://x.com/greenavax" target="_blank">Open @greenavax on X <i class="ti ti-external-link" style="font-size:12px"></i></a>
+      <p style="margin-bottom:12px;">Once followed, click confirm below.</p>
+      <div class="m-actions">
+        <button class="m-cancel" onclick="closeModal()">Cancel</button>
+        <button class="m-confirm" onclick="complete('twitter',100,'Followed @greenavax · +100 GRAVAX')">I followed — claim 100 GRAVAX</button>
+      </div>`,
+    wallet:`<button class="modal-close" onclick="closeModal()"><i class="ti ti-x"></i></button>
+      <h3>Connect wallet to Retro9000</h3>
+      <p>Connect your Avalanche wallet on retro9000.avax.network.</p>
+      <div class="w-opt" onclick="complete('wallet',150,'Wallet connected · +150 GRAVAX')">
+        <div class="w-logo">🔺</div>
+        <div><div class="w-name">Core Wallet</div><div class="w-chain">Avalanche native</div></div>
+      </div>
+      <div class="w-opt" onclick="complete('wallet',150,'Wallet connected · +150 GRAVAX')">
+        <div class="w-logo">🦊</div>
+        <div><div class="w-name">MetaMask</div><div class="w-chain">EVM · C-Chain</div></div>
+      </div>
+      <div class="w-opt" onclick="complete('wallet',150,'Wallet connected · +150 GRAVAX')">
+        <div class="w-logo">🔗</div>
+        <div><div class="w-name">WalletConnect</div><div class="w-chain">Multi-wallet</div></div>
+      </div>
+      <p style="margin-top:8px;font-size:10px;color:#4a7a4a;">Redirects to <span style="color:#4ade80">retro9000.avax.network</span></p>`,
+    xlink:`<button class="modal-close" onclick="closeModal()"><i class="ti ti-x"></i></button>
+      <h3>Link your X account</h3>
+      <p>Authorize your X account on Retro9000 to earn 100 GRAVAX.</p>
+      <a class="ext-link" href="https://retro9000.avax.network" target="_blank">Open retro9000.avax.network <i class="ti ti-external-link" style="font-size:12px"></i></a>
+      <div class="m-actions">
+        <button class="m-cancel" onclick="closeModal()">Cancel</button>
+        <button class="m-confirm" onclick="complete('xlink',100,'X account linked · +100 GRAVAX')">I linked my X — claim 100 GRAVAX</button>
+      </div>`,
+    cchain:`<button class="modal-close" onclick="closeModal()"><i class="ti ti-x"></i></button>
+      <h3>Submit C-Chain address</h3>
+      <p>Paste your Avalanche C-Chain wallet address (starts with 0x…)</p>
+      <input class="inp" id="addrInp" placeholder="0x4f3a8c…" maxlength="42"/>
+      <div class="m-actions">
+        <button class="m-cancel" onclick="closeModal()">Cancel</button>
+        <button class="m-confirm" onclick="submitAddr()">Submit address</button>
+      </div>`
+  };
+  document.getElementById('modalBox').innerHTML=modals[id];
+  document.getElementById('modalOverlay').classList.add('open');
+}
+
+function closeModal(){ document.getElementById('modalOverlay').classList.remove('open'); }
+
+function complete(id,reward,msg){
+  closeModal();
+  if(done.has(id))return;
+  done.add(id);
+  earned+=reward;
+  toast(msg);
+  render();
+}
+
+function submitAddr(){
+  const v=document.getElementById('addrInp')?.value?.trim();
+  if(!v||!v.startsWith('0x')||v.length<10){
+    document.getElementById('addrInp').style.borderColor='#e24b4a';
+    return;
+  }
+  complete('cchain',50,'C-Chain address saved · +50 GRAVAX');
+}
+
+function toast(msg){
+  const t=document.getElementById('toast');
+  document.getElementById('toastMsg').textContent=msg;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),3000);
+}
+
+document.getElementById('modalOverlay').addEventListener('click',function(e){
+  if(e.target===this)closeModal();
+});
+
+render();
+</script>
+</body>
+</html>
