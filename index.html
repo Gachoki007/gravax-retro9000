@@ -5,531 +5,740 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>GRAVAX · Airdrop Campaign</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;800;900&family=Inter:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet"/>
 <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
 <style>
+/* ═══════════════════════════════════════════
+   GRAVAX DESIGN SYSTEM — PRODUCTION READY
+   ═══════════════════════════════════════════ */
+:root{
+  --lime:    #00FF9F;
+  --lime2:   #39FF14;
+  --forest:  #00B074;
+  --gold:    #D4FF4D;
+  --black:   #0A0A0A;
+  --card:    #111814;
+  --card2:   #0d1610;
+  --border:  rgba(0,255,159,0.18);
+  --border2: rgba(0,255,159,0.3);
+  --text:    #E8F5EC;
+  --muted:   #4a7a5a;
+  --mono:    'Space Mono',monospace;
+  --display: 'Orbitron',sans-serif;
+  --body:    'Inter',sans-serif;
+}
 *{box-sizing:border-box;margin:0;padding:0;}
-html,body{
-  min-height:100vh;
-  background:#020a03;
-  color:#fff;
-  font-family:'Inter',sans-serif;
+html{scroll-behavior:smooth;}
+body{
+  background:var(--black);
+  color:var(--text);
+  font-family:var(--body);
   overflow-x:hidden;
+  min-height:100vh;
 }
 
-/* ── BACKGROUND GLOW ── */
+/* ── COSMIC BACKGROUND ── */
 body::before{
   content:'';
-  position:fixed;
-  inset:0;
-  background:radial-gradient(ellipse at 60% 20%, rgba(28,255,107,0.07) 0%, transparent 60%);
-  pointer-events:none;
-  z-index:0;
+  position:fixed;inset:0;
+  background:
+    radial-gradient(ellipse at 20% 10%, rgba(0,255,159,0.06) 0%, transparent 45%),
+    radial-gradient(ellipse at 80% 60%, rgba(57,255,20,0.04) 0%, transparent 40%),
+    radial-gradient(ellipse at 50% 100%, rgba(0,176,116,0.05) 0%, transparent 50%);
+  pointer-events:none;z-index:0;
+}
+
+/* ── GRID BG ── */
+body::after{
+  content:'';
+  position:fixed;inset:0;
+  background-image:
+    linear-gradient(rgba(0,255,159,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,255,159,0.03) 1px, transparent 1px);
+  background-size:60px 60px;
+  pointer-events:none;z-index:0;
+}
+
+/* ── PARTICLES ── */
+.particles{
+  position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden;
+}
+.particle{
+  position:absolute;
+  width:2px;height:2px;
+  background:var(--lime);
+  border-radius:50%;
+  opacity:0;
+  animation:float-up linear infinite;
+}
+@keyframes float-up{
+  0%{transform:translateY(100vh) translateX(0);opacity:0;}
+  10%{opacity:0.6;}
+  90%{opacity:0.2;}
+  100%{transform:translateY(-20px) translateX(40px);opacity:0;}
 }
 
 /* ── HEADER ── */
 header{
-  position:sticky;
-  top:0;
-  z-index:100;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
+  position:sticky;top:0;z-index:200;
+  display:flex;justify-content:space-between;align-items:center;
   padding:18px 6%;
-  background:rgba(2,10,3,0.92);
-  border-bottom:1px solid rgba(28,255,107,0.12);
-  backdrop-filter:blur(14px);
+  background:rgba(10,10,10,0.92);
+  border-bottom:1px solid var(--border);
+  backdrop-filter:blur(20px);
 }
-.logo{
-  display:flex;
-  align-items:center;
-  gap:10px;
-}
-.logo-icon{
-  width:34px;height:34px;
-  border-radius:50%;
-  background:linear-gradient(135deg,#4ade80,#16a34a);
+.logo{display:flex;align-items:center;gap:11px;cursor:pointer;}
+.logo-mark{
+  width:36px;height:36px;border-radius:50%;flex-shrink:0;
+  background:linear-gradient(135deg,#39FF14,#00B074);
   display:flex;align-items:center;justify-content:center;
-  flex-shrink:0;
+  box-shadow:0 0 16px rgba(57,255,20,0.45);
 }
-.logo-icon svg{width:20px;height:20px;}
+.logo-mark svg{width:22px;height:22px;}
 .logo-name{
-  font-size:20px;font-weight:800;
+  font-family:var(--display);
+  font-size:18px;font-weight:800;
   color:#fff;letter-spacing:0.04em;
+  text-shadow:0 0 20px rgba(0,255,159,0.4);
+}
+.header-right{display:flex;align-items:center;gap:12px;}
+.net-pill{
+  display:flex;align-items:center;gap:7px;
+  padding:7px 14px;border-radius:20px;
+  background:rgba(0,255,159,0.06);
+  border:1px solid var(--border);
+  font-size:11px;color:var(--muted);
+  font-family:var(--mono);letter-spacing:0.06em;
+}
+.net-dot{
+  width:7px;height:7px;border-radius:50%;
+  background:var(--lime);
+  box-shadow:0 0 8px var(--lime);
+  animation:pulse-dot 2s infinite;
+}
+@keyframes pulse-dot{
+  0%,100%{box-shadow:0 0 8px var(--lime);}
+  50%{box-shadow:0 0 16px var(--lime),0 0 24px rgba(0,255,159,0.3);}
 }
 .connect-btn{
   display:flex;align-items:center;gap:8px;
-  padding:12px 24px;
-  border-radius:30px;
-  border:2px solid #1cff6b;
+  padding:11px 24px;border-radius:8px;
+  border:1.5px solid var(--lime);
   background:transparent;
-  color:#1cff6b;
-  font-size:13px;font-weight:700;
-  font-family:'Inter',sans-serif;
-  letter-spacing:0.06em;
-  cursor:pointer;
-  transition:all 0.2s;
-}
-.connect-btn:hover{
-  background:#1cff6b;
-  color:#000;
-  box-shadow:0 0 28px rgba(28,255,107,0.45);
-}
-.connect-btn.connected{
-  background:rgba(28,255,107,0.08);
-  border-color:rgba(28,255,107,0.35);
-  color:#1cff6b;
-  font-size:12px;
-  font-family:monospace;
-}
-.connect-btn svg{width:16px;height:16px;flex-shrink:0;}
-
-/* ── WALLET BAR ── */
-.wallet-bar{
-  display:none;
-  background:rgba(8,20,10,0.95);
-  border-bottom:1px solid rgba(28,255,107,0.1);
-  padding:10px 6%;
-  gap:32px;flex-wrap:wrap;align-items:center;
-}
-.wallet-bar.show{display:flex;}
-.wb-item{display:flex;flex-direction:column;gap:1px;}
-.wb-label{font-size:10px;color:#4a8a5a;text-transform:uppercase;letter-spacing:0.09em;font-weight:700;}
-.wb-val{font-size:13px;color:#4ade80;font-weight:700;font-family:monospace;}
-
-/* ── HERO ── */
-.hero{
-  display:grid;
-  grid-template-columns:1fr 480px;
-  align-items:center;
-  padding:60px 6% 40px;
-  gap:20px;
-  position:relative;
-  z-index:1;
-  min-height:82vh;
-}
-.hero-left{display:flex;flex-direction:column;justify-content:center;}
-.live-pill{
-  display:inline-flex;align-items:center;gap:8px;
-  padding:6px 14px;
-  border-radius:20px;
-  background:rgba(28,255,107,0.07);
-  border:1px solid rgba(28,255,107,0.2);
-  font-size:11px;color:#6ee89a;font-weight:600;
-  text-transform:uppercase;letter-spacing:0.08em;
-  margin-bottom:24px;width:fit-content;
-}
-.live-dot{
-  width:7px;height:7px;border-radius:50%;
-  background:#1cff6b;
-  animation:pulse 2s infinite;
-}
-@keyframes pulse{0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(28,255,107,0.5);}50%{opacity:0.6;box-shadow:0 0 0 5px rgba(28,255,107,0);}}
-.hero-h1{
-  font-size:72px;font-weight:900;
-  line-height:0.95;letter-spacing:-0.02em;
-  color:#fff;margin-bottom:4px;
-}
-.hero-h2{
-  font-size:72px;font-weight:900;
-  line-height:0.95;letter-spacing:-0.02em;
-  color:#1cff6b;margin-bottom:26px;
-  text-shadow:0 0 40px rgba(28,255,107,0.3);
-}
-.hero-sub{
-  font-size:17px;color:#9ab09a;line-height:1.7;
-  max-width:480px;margin-bottom:32px;
-}
-.hero-sub strong{color:#1cff6b;}
-.pillars{display:flex;gap:28px;flex-wrap:wrap;}
-.pillar{display:flex;align-items:center;gap:10px;}
-.pillar-icon{
-  width:32px;height:32px;border-radius:50%;
-  background:rgba(28,255,107,0.1);
-  border:1px solid rgba(28,255,107,0.25);
-  display:flex;align-items:center;justify-content:center;
-  font-size:15px;flex-shrink:0;
-}
-.pillar-name{font-size:12px;font-weight:800;color:#fff;text-transform:uppercase;letter-spacing:0.05em;}
-.pillar-sub{font-size:11px;color:#5a8a5a;}
-
-/* ── HERO TREE SIDE ── */
-.hero-right{
-  position:relative;display:flex;
-  align-items:center;justify-content:center;
-}
-.tree-wrap{
-  position:relative;width:460px;height:460px;
-}
-.tree-glow{
-  position:absolute;inset:0;
-  background:radial-gradient(circle at 50% 55%,rgba(28,255,107,0.13) 0%,transparent 65%);
-  border-radius:50%;
-}
-.tree-wrap svg{position:relative;z-index:1;}
-
-/* ── STATS BAR ── */
-.stats-bar{
-  margin:0 6% 48px;
-  background:#071209;
-  border:1px solid rgba(28,255,107,0.18);
-  border-radius:16px;
-  padding:22px 36px;
-  display:flex;align-items:center;
-  position:relative;z-index:1;
-}
-.stat-item{
-  flex:1;display:flex;align-items:center;gap:14px;
-}
-.stat-item+.stat-item{
-  border-left:1px solid rgba(28,255,107,0.12);
-  padding-left:32px;
-}
-.stat-icon{
-  width:40px;height:40px;
-  border-radius:10px;
-  background:rgba(28,255,107,0.08);
-  border:1px solid rgba(28,255,107,0.18);
-  display:flex;align-items:center;justify-content:center;
-  font-size:18px;flex-shrink:0;
-}
-.stat-label{font-size:10px;color:#4a8a5a;text-transform:uppercase;letter-spacing:0.09em;font-weight:700;margin-bottom:3px;}
-.stat-val{font-size:20px;font-weight:900;color:#1cff6b;}
-.stat-val.white{color:#fff;}
-
-/* ── QUESTS SECTION ── */
-.quests-section{padding:0 6% 64px;position:relative;z-index:1;}
-.quests-header{
-  display:flex;align-items:center;gap:16px;
-  margin-bottom:28px;
-}
-.q-line{flex:1;height:1px;background:rgba(28,255,107,0.15);}
-.q-diamond{
-  width:10px;height:10px;
-  background:#1cff6b;
-  transform:rotate(45deg);flex-shrink:0;
-  box-shadow:0 0 10px rgba(28,255,107,0.6);
-}
-.q-title-txt{
-  font-size:22px;font-weight:900;
-  color:#fff;letter-spacing:0.16em;text-transform:uppercase;
-}
-.quest-list{display:flex;flex-direction:column;gap:12px;}
-
-/* ── QUEST CARD ── */
-.quest-card{
-  background:#071209;
-  border:1px solid rgba(28,255,107,0.18);
-  border-radius:16px;
-  padding:22px 26px;
-  display:flex;align-items:center;gap:20px;
+  color:var(--lime);
+  font-family:var(--display);
+  font-size:11px;font-weight:700;
+  letter-spacing:0.08em;
   cursor:pointer;
   transition:all 0.2s;
   position:relative;overflow:hidden;
 }
-.quest-card::before{
+.connect-btn::before{
   content:'';position:absolute;inset:0;
-  background:linear-gradient(90deg,rgba(28,255,107,0.03),transparent);
+  background:linear-gradient(135deg,rgba(0,255,159,0.12),transparent);
   opacity:0;transition:opacity 0.2s;
 }
+.connect-btn:hover{
+  background:var(--lime);color:#0A0A0A;
+  box-shadow:0 0 28px rgba(0,255,159,0.5),0 0 60px rgba(0,255,159,0.2);
+  transform:translateY(-1px);
+}
+.connect-btn:hover::before{opacity:1;}
+.connect-btn.connected{
+  background:rgba(0,255,159,0.07);
+  border-color:rgba(0,255,159,0.3);
+  color:var(--lime);
+  font-family:var(--mono);font-size:12px;font-weight:400;
+}
+
+/* ── WALLET BAR ── */
+.wallet-bar{
+  display:none;
+  background:rgba(0,176,116,0.06);
+  border-bottom:1px solid var(--border);
+  padding:10px 6%;gap:28px;flex-wrap:wrap;
+  position:relative;z-index:10;
+}
+.wallet-bar.show{display:flex;align-items:center;}
+.wb-item{display:flex;flex-direction:column;gap:1px;}
+.wb-label{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:0.1em;font-weight:700;}
+.wb-val{font-size:13px;color:var(--lime);font-family:var(--mono);font-weight:700;}
+
+/* ── HERO ── */
+.hero{
+  display:grid;
+  grid-template-columns:1fr 500px;
+  align-items:center;
+  padding:70px 6% 50px;
+  gap:30px;
+  position:relative;z-index:1;
+  min-height:88vh;
+}
+.hero-left{display:flex;flex-direction:column;}
+.campaign-badge{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:7px 16px;border-radius:30px;
+  background:rgba(0,255,159,0.07);
+  border:1px solid rgba(0,255,159,0.22);
+  font-size:11px;color:rgba(0,255,159,0.75);
+  font-family:var(--mono);letter-spacing:0.08em;
+  text-transform:uppercase;
+  margin-bottom:28px;width:fit-content;
+}
+.hero-h1{
+  font-family:var(--display);
+  font-size:74px;font-weight:900;
+  line-height:0.92;letter-spacing:-0.02em;
+  color:#fff;margin-bottom:6px;
+  text-shadow:0 0 40px rgba(255,255,255,0.1);
+}
+.hero-h2{
+  font-family:var(--display);
+  font-size:52px;font-weight:900;
+  line-height:1;letter-spacing:-0.01em;
+  color:var(--lime);
+  margin-bottom:28px;
+  text-shadow:0 0 40px rgba(0,255,159,0.45),0 0 80px rgba(0,255,159,0.15);
+}
+.hero-sub{
+  font-size:16px;color:rgba(232,245,236,0.65);
+  line-height:1.75;max-width:480px;margin-bottom:36px;
+}
+.hero-sub strong{color:var(--lime);}
+.pillars{display:flex;gap:24px;flex-wrap:wrap;}
+.pillar{display:flex;align-items:center;gap:10px;}
+.pillar-orb{
+  width:34px;height:34px;border-radius:50%;flex-shrink:0;
+  background:rgba(0,255,159,0.08);
+  border:1px solid rgba(0,255,159,0.25);
+  display:flex;align-items:center;justify-content:center;
+  font-size:15px;
+  box-shadow:0 0 12px rgba(0,255,159,0.1);
+}
+.pillar-name{
+  font-size:11px;font-weight:800;color:#fff;
+  text-transform:uppercase;letter-spacing:0.07em;
+  font-family:var(--display);
+}
+.pillar-sub{font-size:10px;color:var(--muted);}
+
+/* ── HERO TREE ── */
+.hero-right{
+  position:relative;display:flex;
+  align-items:center;justify-content:center;
+}
+.tree-container{
+  position:relative;width:480px;height:480px;
+}
+.tree-glow-orb{
+  position:absolute;
+  top:50%;left:50%;
+  transform:translate(-50%,-50%);
+  width:320px;height:320px;
+  background:radial-gradient(circle,rgba(0,255,159,0.12) 0%,transparent 65%);
+  border-radius:50%;
+  animation:breathe 4s ease-in-out infinite;
+}
+@keyframes breathe{
+  0%,100%{transform:translate(-50%,-50%) scale(1);opacity:0.8;}
+  50%{transform:translate(-50%,-50%) scale(1.1);opacity:1;}
+}
+.tree-container svg{position:relative;z-index:1;}
+
+/* ── STATS BAR ── */
+.stats-bar{
+  margin:0 6% 52px;
+  background:rgba(17,24,20,0.85);
+  border:1px solid var(--border);
+  border-radius:16px;
+  padding:24px 36px;
+  display:flex;align-items:center;
+  position:relative;z-index:1;
+  backdrop-filter:blur(10px);
+  box-shadow:0 0 40px rgba(0,255,159,0.05),inset 0 1px 0 rgba(0,255,159,0.08);
+}
+.stat-item{
+  flex:1;display:flex;align-items:center;gap:16px;
+}
+.stat-item+.stat-item{
+  border-left:1px solid rgba(0,255,159,0.1);
+  padding-left:32px;
+}
+.stat-orb{
+  width:42px;height:42px;border-radius:12px;flex-shrink:0;
+  background:rgba(0,255,159,0.07);
+  border:1px solid rgba(0,255,159,0.18);
+  display:flex;align-items:center;justify-content:center;
+  font-size:19px;
+  box-shadow:inset 0 1px 0 rgba(0,255,159,0.1);
+}
+.stat-label{
+  font-size:9px;color:var(--muted);
+  text-transform:uppercase;letter-spacing:0.1em;
+  font-weight:700;margin-bottom:4px;
+}
+.stat-val{
+  font-family:var(--display);
+  font-size:18px;font-weight:800;color:var(--lime);
+  text-shadow:0 0 16px rgba(0,255,159,0.35);
+}
+.stat-val.w{color:#fff;text-shadow:none;}
+
+/* ── QUESTS SECTION ── */
+.quests-section{padding:0 6% 68px;position:relative;z-index:1;}
+.section-header{
+  display:flex;align-items:center;gap:18px;margin-bottom:32px;
+}
+.s-line{
+  flex:1;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(0,255,159,0.25),transparent);
+}
+.s-diamond{
+  width:10px;height:10px;
+  background:var(--lime);transform:rotate(45deg);flex-shrink:0;
+  box-shadow:0 0 12px var(--lime),0 0 24px rgba(0,255,159,0.4);
+}
+.section-title{
+  font-family:var(--display);
+  font-size:20px;font-weight:800;
+  color:#fff;letter-spacing:0.2em;text-transform:uppercase;
+  text-shadow:0 0 20px rgba(0,255,159,0.2);
+}
+.quest-list{display:flex;flex-direction:column;gap:14px;}
+
+/* ── QUEST CARD ── */
+.quest-card{
+  background:rgba(13,22,16,0.9);
+  border:1px solid var(--border);
+  border-radius:16px;
+  padding:22px 26px;
+  display:flex;align-items:center;gap:20px;
+  cursor:pointer;
+  transition:all 0.22s;
+  position:relative;overflow:hidden;
+  backdrop-filter:blur(8px);
+}
+.quest-card::before{
+  content:'';position:absolute;left:0;top:0;bottom:0;
+  width:3px;
+  background:linear-gradient(180deg,var(--lime),var(--forest));
+  opacity:0;transition:opacity 0.2s;
+  border-radius:0 2px 2px 0;
+}
 .quest-card:hover{
-  border-color:rgba(28,255,107,0.55);
-  transform:translateY(-2px);
-  box-shadow:0 8px 32px rgba(28,255,107,0.08);
+  border-color:rgba(0,255,159,0.45);
+  transform:translateY(-3px);
+  box-shadow:0 12px 40px rgba(0,255,159,0.08),0 0 0 1px rgba(0,255,159,0.1);
 }
 .quest-card:hover::before{opacity:1;}
 .quest-card.done{
-  border-color:rgba(28,255,107,0.3);
-  background:#071a09;
+  border-color:rgba(0,255,159,0.28);
+  background:rgba(0,176,116,0.06);
 }
-.quest-card.locked{opacity:0.35;pointer-events:none;cursor:default;}
+.quest-card.done::before{opacity:1;}
+.quest-card.locked{
+  opacity:0.32;pointer-events:none;
+  filter:grayscale(0.5);
+}
 
-.q-icon-box{
-  width:52px;height:52px;flex-shrink:0;
-  border-radius:12px;
-  background:rgba(28,255,107,0.1);
-  border:1px solid rgba(28,255,107,0.22);
+/* quest icon */
+.q-icon{
+  width:54px;height:54px;flex-shrink:0;
+  border-radius:14px;
+  background:rgba(0,255,159,0.08);
+  border:1px solid rgba(0,255,159,0.2);
   display:flex;align-items:center;justify-content:center;
+  box-shadow:inset 0 1px 0 rgba(0,255,159,0.1),0 0 16px rgba(0,255,159,0.06);
+  transition:all 0.2s;
 }
-.q-icon-box svg{width:26px;height:26px;}
-.q-icon-box .emoji{font-size:22px;}
+.quest-card:hover .q-icon{
+  background:rgba(0,255,159,0.12);
+  box-shadow:inset 0 1px 0 rgba(0,255,159,0.15),0 0 24px rgba(0,255,159,0.12);
+}
+.quest-card.done .q-icon{
+  background:rgba(0,255,159,0.15);
+  border-color:rgba(0,255,159,0.35);
+}
 
-.q-content{flex:1;min-width:0;}
-.q-name{font-size:16px;font-weight:700;color:#fff;margin-bottom:4px;}
-.q-desc{font-size:13px;color:#7a9a7a;margin-bottom:10px;line-height:1.45;}
-.q-desc a{color:#1cff6b;text-decoration:none;}
+/* quest body */
+.q-body{flex:1;min-width:0;}
+.q-name{
+  font-size:16px;font-weight:700;color:#fff;
+  margin-bottom:5px;letter-spacing:-0.01em;
+}
+.q-desc{
+  font-size:13px;color:rgba(232,245,236,0.5);
+  margin-bottom:10px;line-height:1.5;
+}
+.q-desc a{color:var(--lime);text-decoration:none;}
 .q-desc a:hover{text-decoration:underline;}
 .q-step{
-  display:inline-block;
-  padding:3px 10px;border-radius:5px;
-  background:rgba(28,255,107,0.07);
-  border:1px solid rgba(28,255,107,0.18);
-  font-size:10px;font-weight:800;color:#4a8a5a;
-  letter-spacing:0.09em;text-transform:uppercase;
+  display:inline-flex;align-items:center;gap:5px;
+  padding:3px 10px;border-radius:20px;
+  background:rgba(0,255,159,0.06);
+  border:1px solid rgba(0,255,159,0.15);
+  font-size:9px;font-weight:800;color:var(--muted);
+  letter-spacing:0.1em;text-transform:uppercase;
+  font-family:var(--mono);
 }
 
-.q-arrow{
-  font-size:26px;color:rgba(28,255,107,0.3);
-  flex-shrink:0;font-weight:300;
-  transition:color 0.2s;
+/* chevron */
+.q-chevron{
+  font-size:24px;color:rgba(0,255,159,0.25);
+  flex-shrink:0;transition:all 0.2s;
+  font-weight:300;
 }
-.quest-card:hover .q-arrow{color:#1cff6b;}
-.quest-card.done .q-arrow{color:#1cff6b;}
+.quest-card:hover .q-chevron{
+  color:var(--lime);
+  transform:translateX(3px);
+  text-shadow:0 0 10px var(--lime);
+}
+.quest-card.done .q-chevron{color:var(--lime);}
 
+/* reward box */
 .q-reward{
-  flex-shrink:0;min-width:112px;
-  background:rgba(28,255,107,0.07);
-  border:1px solid rgba(28,255,107,0.2);
+  flex-shrink:0;min-width:114px;
+  background:rgba(0,255,159,0.05);
+  border:1px solid rgba(0,255,159,0.18);
   border-radius:12px;
-  padding:12px 16px;text-align:center;
+  padding:14px 16px;text-align:center;
+  transition:all 0.2s;
+}
+.quest-card:hover .q-reward{
+  background:rgba(0,255,159,0.08);
+  border-color:rgba(0,255,159,0.3);
+  box-shadow:0 0 20px rgba(0,255,159,0.08);
 }
 .quest-card.done .q-reward{
-  background:rgba(28,255,107,0.12);
-  border-color:rgba(28,255,107,0.35);
+  background:rgba(0,255,159,0.1);
+  border-color:rgba(0,255,159,0.32);
 }
-.qr-top{font-size:9px;font-weight:800;color:#4a8a5a;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:4px;}
-.qr-amount{font-size:26px;font-weight:900;color:#1cff6b;line-height:1;text-shadow:0 0 20px rgba(28,255,107,0.4);}
-.qr-unit{font-size:11px;font-weight:800;color:#1cff6b;margin-bottom:2px;}
-.qr-xp{font-size:11px;color:#4a8a5a;font-weight:600;}
+.qr-label{
+  font-size:8px;font-weight:800;color:var(--muted);
+  text-transform:uppercase;letter-spacing:0.12em;
+  font-family:var(--mono);margin-bottom:5px;
+}
+.qr-amount{
+  font-family:var(--display);
+  font-size:28px;font-weight:900;color:var(--lime);
+  line-height:1;
+  text-shadow:0 0 20px rgba(0,255,159,0.5);
+}
+.qr-unit{
+  font-size:11px;font-weight:700;color:var(--lime);
+  opacity:0.8;margin-bottom:3px;
+  font-family:var(--display);letter-spacing:0.05em;
+}
+.qr-xp{
+  font-size:10px;color:var(--gold);
+  font-weight:700;font-family:var(--mono);
+  text-shadow:0 0 8px rgba(212,255,77,0.4);
+}
 
-/* ── ACTION BUTTON inside card ── */
-.q-action-btn{
+/* action button — same style as connect wallet */
+.q-btn{
   flex-shrink:0;
-  padding:10px 18px;
-  border-radius:10px;
-  border:1.5px solid #1cff6b;
+  padding:12px 22px;
+  border-radius:8px;
+  border:1.5px solid var(--lime);
   background:transparent;
-  color:#1cff6b;
-  font-size:12px;font-weight:700;
-  font-family:'Inter',sans-serif;
-  letter-spacing:0.05em;
+  color:var(--lime);
+  font-family:var(--display);
+  font-size:11px;font-weight:700;
+  letter-spacing:0.08em;
   cursor:pointer;
-  transition:all 0.18s;
+  transition:all 0.2s;
   white-space:nowrap;
+  position:relative;overflow:hidden;
+  z-index:2;
 }
-.q-action-btn:hover{
-  background:#1cff6b;
-  color:#000;
-  box-shadow:0 0 16px rgba(28,255,107,0.4);
+.q-btn::before{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(135deg,rgba(0,255,159,0.15),transparent);
+  opacity:0;transition:opacity 0.2s;
 }
-.q-action-btn.done-btn{
-  border-color:rgba(28,255,107,0.3);
-  color:rgba(28,255,107,0.6);
+.q-btn:hover{
+  background:var(--lime);
+  color:#0A0A0A;
+  box-shadow:0 0 28px rgba(0,255,159,0.5),0 0 60px rgba(0,255,159,0.2);
+  transform:translateY(-1px);
+}
+.q-btn:hover::before{opacity:1;}
+.q-btn:active{transform:translateY(0) scale(0.98);}
+.q-btn.done-btn{
+  border-color:rgba(0,255,159,0.22);
+  color:rgba(0,255,159,0.45);
   cursor:default;
+  background:rgba(0,255,159,0.04);
 }
-.q-action-btn.done-btn:hover{
-  background:transparent;color:rgba(28,255,107,0.6);box-shadow:none;
+.q-btn.done-btn:hover{
+  background:rgba(0,255,159,0.04);
+  color:rgba(0,255,159,0.45);
+  box-shadow:none;transform:none;
 }
 
 /* ── AIRDROP BANNER ── */
 .airdrop-banner{
-  margin:0 6% 48px;
-  background:linear-gradient(120deg,#071a09 0%,#0a2a0c 60%,#071a09 100%);
-  border:1px solid rgba(28,255,107,0.22);
-  border-radius:16px;
-  padding:30px 36px;
-  display:flex;align-items:center;gap:24px;
+  margin:0 6% 52px;
+  background:linear-gradient(120deg,rgba(0,26,14,0.95) 0%,rgba(0,40,22,0.9) 50%,rgba(0,26,14,0.95) 100%);
+  border:1px solid rgba(0,255,159,0.22);
+  border-radius:18px;
+  padding:32px 40px;
+  display:flex;align-items:center;gap:28px;
   position:relative;overflow:hidden;z-index:1;
+  backdrop-filter:blur(10px);
+  box-shadow:0 0 60px rgba(0,255,159,0.06),inset 0 1px 0 rgba(0,255,159,0.1);
 }
 .ab-glow{
-  position:absolute;right:0;top:0;bottom:0;width:280px;
-  background:radial-gradient(ellipse at right,rgba(28,255,107,0.1) 0%,transparent 65%);
+  position:absolute;right:-30px;top:-30px;
+  width:280px;height:280px;
+  background:radial-gradient(circle,rgba(0,255,159,0.12) 0%,transparent 65%);
   pointer-events:none;
+  animation:breathe 5s ease-in-out infinite;
 }
-.ab-icon{
-  width:56px;height:56px;border-radius:14px;flex-shrink:0;
-  background:rgba(28,255,107,0.1);
-  border:1px solid rgba(28,255,107,0.25);
-  display:flex;align-items:center;justify-content:center;font-size:28px;
+.ab-icon-wrap{
+  width:58px;height:58px;border-radius:16px;flex-shrink:0;
+  background:rgba(0,255,159,0.1);
+  border:1px solid rgba(0,255,159,0.28);
+  display:flex;align-items:center;justify-content:center;
+  font-size:28px;
+  box-shadow:0 0 24px rgba(0,255,159,0.15);
 }
-.ab-text{flex:1;position:relative;z-index:1;}
-.ab-text p{font-size:16px;color:#9ab09a;font-weight:500;margin-bottom:4px;}
-.ab-text strong{font-size:22px;font-weight:900;color:#1cff6b;text-shadow:0 0 30px rgba(28,255,107,0.35);}
-.ab-coins{display:flex;gap:10px;align-items:center;position:relative;z-index:1;}
+.ab-body{flex:1;position:relative;z-index:1;}
+.ab-body p{
+  font-size:16px;color:rgba(232,245,236,0.6);
+  font-weight:500;margin-bottom:5px;
+}
+.ab-body strong{
+  font-family:var(--display);
+  font-size:24px;font-weight:900;color:var(--lime);
+  text-shadow:0 0 30px rgba(0,255,159,0.45);
+  letter-spacing:0.02em;
+}
+.ab-coins{display:flex;gap:12px;align-items:center;position:relative;z-index:1;}
 .ab-coin{
   border-radius:50%;
-  background:rgba(28,255,107,0.08);
-  border:2px solid rgba(28,255,107,0.25);
+  background:rgba(0,255,159,0.08);
+  border:2px solid rgba(0,255,159,0.22);
   display:flex;align-items:center;justify-content:center;
+  box-shadow:0 0 12px rgba(0,255,159,0.1);
+  animation:orbit 6s ease-in-out infinite;
+}
+.ab-coin:nth-child(2){animation-delay:2s;}
+.ab-coin:nth-child(3){animation-delay:4s;}
+@keyframes orbit{
+  0%,100%{transform:translateY(0);}
+  50%{transform:translateY(-6px);}
 }
 
 /* ── FOOTER ── */
 footer{
-  border-top:1px solid rgba(28,255,107,0.12);
-  padding:24px 6%;
+  border-top:1px solid rgba(0,255,159,0.1);
+  padding:26px 6%;
   display:flex;justify-content:space-between;align-items:center;
   flex-wrap:wrap;gap:16px;
   position:relative;z-index:1;
+  background:rgba(10,10,10,0.8);
 }
 .footer-tagline{
-  font-size:12px;color:#4a8a5a;
+  font-size:12px;color:var(--muted);
   display:flex;align-items:center;gap:10px;
+  font-family:var(--mono);
 }
 .footer-tagline span{color:#fff;font-weight:700;}
 .footer-icons{display:flex;gap:10px;}
 .f-icon{
   width:36px;height:36px;border-radius:9px;
-  border:1px solid rgba(28,255,107,0.15);
-  background:rgba(28,255,107,0.05);
+  border:1px solid rgba(0,255,159,0.15);
+  background:rgba(0,255,159,0.04);
   display:flex;align-items:center;justify-content:center;
-  cursor:pointer;transition:all 0.15s;text-decoration:none;
+  cursor:pointer;transition:all 0.18s;text-decoration:none;
 }
-.f-icon:hover{border-color:#1cff6b;background:rgba(28,255,107,0.12);}
-.f-icon svg{width:16px;height:16px;fill:#4a8a5a;}
-.f-icon:hover svg{fill:#1cff6b;}
+.f-icon:hover{
+  border-color:var(--lime);
+  background:rgba(0,255,159,0.1);
+  box-shadow:0 0 16px rgba(0,255,159,0.2);
+  transform:translateY(-2px);
+}
+.f-icon svg{width:15px;height:15px;fill:var(--muted);}
+.f-icon:hover svg{fill:var(--lime);}
 
 /* ── MODAL ── */
 .overlay{
   display:none;position:fixed;inset:0;
-  background:rgba(0,0,0,0.85);
+  background:rgba(0,0,0,0.88);
   z-index:500;align-items:center;justify-content:center;
-  backdrop-filter:blur(6px);
+  backdrop-filter:blur(8px);
 }
 .overlay.open{display:flex;}
 .modal{
-  background:#071209;
-  border:1px solid rgba(28,255,107,0.25);
-  border-radius:18px;
-  padding:30px;
-  width:420px;max-width:94vw;
+  background:rgba(13,22,16,0.98);
+  border:1px solid rgba(0,255,159,0.25);
+  border-radius:20px;padding:32px;
+  width:440px;max-width:94vw;
   position:relative;
+  box-shadow:0 0 60px rgba(0,255,159,0.08),0 40px 80px rgba(0,0,0,0.6);
 }
 .modal-close{
-  position:absolute;top:16px;right:18px;
+  position:absolute;top:18px;right:20px;
   background:none;border:none;cursor:pointer;
-  color:#4a8a5a;font-size:22px;line-height:1;
-  transition:color 0.15s;
+  color:var(--muted);font-size:22px;line-height:1;
+  transition:all 0.15s;
 }
-.modal-close:hover{color:#1cff6b;}
-.modal h3{font-size:19px;font-weight:800;color:#fff;margin-bottom:6px;padding-right:24px;}
-.modal-desc{font-size:13px;color:#7a9a7a;line-height:1.65;margin-bottom:18px;}
+.modal-close:hover{color:var(--lime);transform:scale(1.1);}
+.modal h3{
+  font-family:var(--display);
+  font-size:18px;font-weight:800;color:#fff;
+  margin-bottom:8px;padding-right:28px;
+  letter-spacing:0.02em;
+}
+.modal-desc{
+  font-size:13px;color:rgba(232,245,236,0.55);
+  line-height:1.7;margin-bottom:20px;
+}
 .ext-link{
-  display:flex;align-items:center;justify-content:center;gap:8px;
-  padding:13px;
-  background:rgba(28,255,107,0.07);
-  border:1px solid rgba(28,255,107,0.25);
-  border-radius:10px;
-  color:#4ade80;font-size:13px;font-weight:600;
+  display:flex;align-items:center;justify-content:center;gap:9px;
+  padding:14px;
+  background:rgba(0,255,159,0.06);
+  border:1px solid rgba(0,255,159,0.22);
+  border-radius:12px;
+  color:var(--lime);font-size:13px;font-weight:700;
   text-decoration:none;margin-bottom:14px;
-  transition:all 0.15s;
+  transition:all 0.18s;font-family:var(--display);
+  letter-spacing:0.04em;
 }
-.ext-link:hover{border-color:#1cff6b;background:rgba(28,255,107,0.12);}
+.ext-link:hover{
+  border-color:var(--lime);
+  background:rgba(0,255,159,0.1);
+  box-shadow:0 0 20px rgba(0,255,159,0.15);
+  transform:translateY(-1px);
+}
 .w-opt{
-  display:flex;align-items:center;gap:12px;
-  padding:12px 14px;border-radius:10px;
-  border:1px solid rgba(28,255,107,0.15);
-  margin-bottom:8px;cursor:pointer;
-  transition:all 0.15s;
+  display:flex;align-items:center;gap:14px;
+  padding:14px 16px;border-radius:12px;
+  border:1px solid rgba(0,255,159,0.13);
+  margin-bottom:10px;cursor:pointer;transition:all 0.18s;
 }
-.w-opt:hover{border-color:#1cff6b;background:rgba(28,255,107,0.07);}
+.w-opt:hover{
+  border-color:rgba(0,255,159,0.4);
+  background:rgba(0,255,159,0.05);
+  transform:translateX(3px);
+}
 .w-logo{
-  width:38px;height:38px;border-radius:9px;
-  background:rgba(28,255,107,0.08);
-  border:1px solid rgba(28,255,107,0.15);
+  width:38px;height:38px;border-radius:10px;
+  background:rgba(0,255,159,0.08);
+  border:1px solid rgba(0,255,159,0.15);
   display:flex;align-items:center;justify-content:center;font-size:19px;
 }
-.w-name{font-size:14px;font-weight:700;color:#fff;}
-.w-sub{font-size:11px;color:#4a8a5a;}
-.addr-input{
+.w-name{font-size:14px;font-weight:700;color:#fff;margin-bottom:2px;}
+.w-sub{font-size:11px;color:var(--muted);}
+.addr-inp{
   width:100%;
-  background:#020a03;
-  border:1px solid rgba(28,255,107,0.2);
+  background:rgba(0,0,0,0.6);
+  border:1px solid rgba(0,255,159,0.18);
   border-radius:10px;
-  padding:12px 14px;
+  padding:13px 16px;
   color:#fff;font-size:13px;
-  font-family:'Inter',sans-serif;
-  outline:none;margin-bottom:4px;
+  font-family:var(--mono);
+  outline:none;margin-bottom:6px;
+  transition:border-color 0.15s;
 }
-.addr-input:focus{border-color:#1cff6b;}
-.addr-input::placeholder{color:#2a5a2a;}
-.addr-hint{font-size:11px;color:#4a8a5a;margin-bottom:14px;}
-.modal-actions{display:flex;gap:10px;margin-top:14px;}
+.addr-inp:focus{border-color:var(--lime);box-shadow:0 0 12px rgba(0,255,159,0.1);}
+.addr-inp::placeholder{color:rgba(74,122,90,0.6);}
+.addr-hint{font-size:11px;color:var(--muted);margin-bottom:16px;font-family:var(--mono);}
+.m-actions{display:flex;gap:10px;}
 .btn-cancel{
   flex:1;padding:12px;border-radius:10px;
-  border:1px solid rgba(28,255,107,0.15);
-  background:transparent;color:#4a8a5a;
-  cursor:pointer;font-size:13px;font-weight:600;
-  font-family:'Inter',sans-serif;transition:all 0.15s;
+  border:1px solid rgba(0,255,159,0.15);
+  background:transparent;color:var(--muted);
+  cursor:pointer;font-size:12px;font-weight:600;
+  font-family:var(--body);transition:all 0.15s;
 }
-.btn-cancel:hover{border-color:rgba(28,255,107,0.35);color:#fff;}
+.btn-cancel:hover{border-color:rgba(0,255,159,0.3);color:#fff;}
 .btn-submit{
   flex:2;padding:12px;border-radius:10px;
-  border:none;background:#1cff6b;color:#000;
-  cursor:pointer;font-size:13px;font-weight:800;
-  font-family:'Inter',sans-serif;transition:all 0.15s;
+  border:none;background:var(--lime);color:#0A0A0A;
+  cursor:pointer;font-size:12px;font-weight:800;
+  font-family:var(--display);letter-spacing:0.06em;
+  transition:all 0.18s;
 }
-.btn-submit:hover{background:#0ee05a;box-shadow:0 0 20px rgba(28,255,107,0.4);}
+.btn-submit:hover{
+  background:#39FF14;
+  box-shadow:0 0 24px rgba(0,255,159,0.5);
+  transform:translateY(-1px);
+}
 .pending-note{
-  background:rgba(28,255,107,0.05);
-  border:1px solid rgba(28,255,107,0.12);
-  border-radius:8px;padding:10px 12px;
-  font-size:11px;color:#4a8a5a;line-height:1.65;
-  margin-top:12px;
+  background:rgba(0,255,159,0.04);
+  border:1px solid rgba(0,255,159,0.1);
+  border-radius:10px;padding:12px 14px;
+  font-size:11px;color:var(--muted);
+  line-height:1.7;margin-top:14px;
 }
 
 /* ── TOAST ── */
 .toast{
   position:fixed;bottom:28px;left:50%;
   transform:translateX(-50%) translateY(16px);
-  background:#071a09;
-  border:1px solid rgba(28,255,107,0.4);
-  border-radius:10px;padding:12px 22px;
-  font-size:13px;color:#4ade80;font-weight:600;
+  background:rgba(13,22,16,0.97);
+  border:1px solid rgba(0,255,159,0.4);
+  border-radius:12px;padding:13px 24px;
+  font-size:13px;color:var(--lime);font-weight:600;
   display:flex;align-items:center;gap:10px;
   opacity:0;transition:all 0.3s;
   pointer-events:none;z-index:600;white-space:nowrap;
+  box-shadow:0 0 30px rgba(0,255,159,0.15);
+  font-family:var(--body);
 }
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
-.toast.err{border-color:rgba(220,60,60,0.4);color:#f87171;background:#1a0505;}
+.toast.err{border-color:rgba(248,113,113,0.4);color:#f87171;background:rgba(26,5,5,0.97);}
 
 /* ── RESPONSIVE ── */
-@media(max-width:860px){
-  .hero{grid-template-columns:1fr;padding:40px 6% 28px;min-height:auto;}
+@media(max-width:900px){
+  .hero{grid-template-columns:1fr;min-height:auto;padding:44px 5% 32px;}
   .hero-right{display:none;}
-  .hero-h1,.hero-h2{font-size:48px;}
-  .stats-bar{margin:0 5% 32px;flex-direction:column;gap:16px;padding:18px 22px;}
-  .stat-item+.stat-item{border-left:none;border-top:1px solid rgba(28,255,107,0.1);padding-left:0;padding-top:16px;}
-  .quests-section{padding:0 5% 40px;}
-  .airdrop-banner{margin:0 5% 36px;flex-wrap:wrap;padding:22px;}
-  header{padding:16px 5%;}
+  .hero-h1{font-size:48px;}
+  .hero-h2{font-size:34px;}
+  .stats-bar{margin:0 5% 36px;flex-direction:column;gap:18px;padding:20px 22px;}
+  .stat-item+.stat-item{border-left:none;border-top:1px solid rgba(0,255,159,0.08);padding-left:0;padding-top:18px;}
+  .quests-section{padding:0 5% 44px;}
+  .airdrop-banner{margin:0 5% 40px;flex-wrap:wrap;padding:24px;}
+  header{padding:15px 5%;}
+  footer{padding:20px 5%;}
   .quest-card{flex-wrap:wrap;gap:14px;}
-  .q-reward{min-width:90px;}
 }
 </style>
 </head>
 <body>
 
+<!-- PARTICLES -->
+<div class="particles" id="particles"></div>
+
 <!-- HEADER -->
 <header>
   <div class="logo">
-    <div class="logo-icon">
-      <!-- GRAVAX logo: green circle, white A shapes -->
+    <div class="logo-mark">
       <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-        <defs>
-          <radialGradient id="lg" cx="38%" cy="32%" r="68%">
-            <stop offset="0%" stop-color="#4ade80"/>
-            <stop offset="100%" stop-color="#15803d"/>
-          </radialGradient>
-        </defs>
-        <circle cx="50" cy="50" r="50" fill="url(#lg)"/>
-        <polygon points="50,16 76,65 24,65" fill="white" opacity="0.96"/>
-        <polygon points="50,29 69,65 31,65" fill="url(#lg)"/>
-        <polygon points="50,56 66,80 34,80" fill="white" opacity="0.9"/>
-        <polygon points="50,65 62,80 38,80" fill="url(#lg)"/>
+        <circle cx="50" cy="50" r="50" fill="rgba(0,0,0,0.3)"/>
+        <polygon points="50,14 78,67 22,67" fill="white" opacity="0.96"/>
+        <polygon points="50,28 70,67 30,67" fill="rgba(0,176,116,0.8)"/>
+        <polygon points="50,58 66,82 34,82" fill="white" opacity="0.9"/>
+        <polygon points="50,67 62,82 38,82" fill="rgba(0,176,116,0.8)"/>
       </svg>
     </div>
     <span class="logo-name">GRAVAX</span>
   </div>
-  <button class="connect-btn" id="connectBtn" onclick="connectWallet()">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
-      <rect x="2" y="7" width="20" height="14" rx="2.5"/>
-      <path d="M16 7V5a2 2 0 0 0-4 0v2"/>
-    </svg>
-    CONNECT WALLET
-  </button>
+  <div class="header-right">
+    <div class="net-pill">
+      <span class="net-dot"></span>
+      AVALANCHE C-CHAIN
+    </div>
+    <button class="connect-btn" id="connectBtn" onclick="connectWallet()">
+      CONNECT WALLET
+    </button>
+  </div>
 </header>
 
-<!-- WALLET BAR (shown after connect) -->
+<!-- WALLET BAR -->
 <div class="wallet-bar" id="walletBar">
   <div class="wb-item"><span class="wb-label">Wallet</span><span class="wb-val" id="wbAddr">—</span></div>
   <div class="wb-item"><span class="wb-label">GRAV Balance</span><span class="wb-val" id="wbBal">—</span></div>
@@ -540,33 +749,33 @@ footer{
 <!-- HERO -->
 <section class="hero">
   <div class="hero-left">
-    <div class="live-pill">
-      <span class="live-dot"></span>
-      Live on Avalanche C-Chain
+    <div class="campaign-badge">
+      <span class="net-dot"></span>
+      Season 1 · Live Now
     </div>
     <div class="hero-h1">GRAVAX</div>
     <div class="hero-h2">AIRDROP CAMPAIGN</div>
     <p class="hero-sub">
       Join the mission. Complete quests, grow the ecosystem,<br>
-      and earn <strong>GRAV</strong> rewards.
+      and earn <strong>GRAV</strong> rewards on Avalanche C-Chain.
     </p>
     <div class="pillars">
       <div class="pillar">
-        <div class="pillar-icon">🌱</div>
+        <div class="pillar-orb">🌱</div>
         <div>
           <div class="pillar-name">Conserve</div>
           <div class="pillar-sub">for the future</div>
         </div>
       </div>
       <div class="pillar">
-        <div class="pillar-icon">🛡</div>
+        <div class="pillar-orb">🛡</div>
         <div>
           <div class="pillar-name">Verify</div>
           <div class="pillar-sub">your actions</div>
         </div>
       </div>
       <div class="pillar">
-        <div class="pillar-icon">🔺</div>
+        <div class="pillar-orb">🔺</div>
         <div>
           <div class="pillar-name">Tokenize</div>
           <div class="pillar-sub">your impact</div>
@@ -575,101 +784,106 @@ footer{
     </div>
   </div>
   <div class="hero-right">
-    <div class="tree-wrap">
-      <div class="tree-glow"></div>
-      <svg viewBox="0 0 460 460" width="460" height="460" xmlns="http://www.w3.org/2000/svg">
-        <!-- terrain -->
-        <path d="M10 390 Q115 355 230 370 Q345 385 450 345" stroke="#1cff6b" stroke-width="0.9" fill="none" opacity="0.3"/>
-        <path d="M10 408 Q115 375 230 388 Q345 402 450 365" stroke="#1cff6b" stroke-width="0.5" fill="none" opacity="0.2"/>
-        <line x1="60" y1="350" x2="60" y2="420" stroke="#1cff6b" stroke-width="0.4" opacity="0.25"/>
-        <line x1="145" y1="345" x2="145" y2="420" stroke="#1cff6b" stroke-width="0.4" opacity="0.25"/>
-        <line x1="230" y1="345" x2="230" y2="420" stroke="#1cff6b" stroke-width="0.4" opacity="0.25"/>
-        <line x1="315" y1="348" x2="315" y2="420" stroke="#1cff6b" stroke-width="0.4" opacity="0.25"/>
-        <line x1="400" y1="352" x2="400" y2="420" stroke="#1cff6b" stroke-width="0.4" opacity="0.25"/>
-        <ellipse cx="230" cy="395" rx="88" ry="10" fill="#1cff6b" opacity="0.09"/>
-        <!-- trunk -->
-        <path d="M212 390 Q215 325 220 265 Q224 205 222 145" stroke="#1a5c1a" stroke-width="22" fill="none" stroke-linecap="round"/>
-        <path d="M248 390 Q245 325 240 265 Q236 205 238 145" stroke="#1a5c1a" stroke-width="17" fill="none" stroke-linecap="round"/>
-        <path d="M230 385 Q230 310 230 235" stroke="#22701a" stroke-width="9" fill="none" stroke-linecap="round" opacity="0.35"/>
-        <!-- canopy -->
-        <circle cx="230" cy="128" r="96" fill="#071a09" opacity="0.97"/>
-        <circle cx="150" cy="158" r="70" fill="#071a09" opacity="0.93"/>
-        <circle cx="310" cy="158" r="70" fill="#071a09" opacity="0.93"/>
-        <circle cx="175" cy="82" r="58" fill="#051205"/>
-        <circle cx="285" cy="82" r="58" fill="#051205"/>
-        <circle cx="230" cy="58" r="52" fill="#040e04"/>
-        <!-- GRAVAX coins — big A logo style -->
-        <!-- coin macro -->
-        <g transform="translate(163,72)">
-          <circle r="28" fill="#1cff6b" opacity="0.9"/>
-          <circle r="23" fill="#0ea34a"/>
-          <polygon points="0,-13 11,8 -11,8" fill="white" opacity="0.95"/>
-          <polygon points="0,-5 6,8 -6,8" fill="#0ea34a"/>
-          <polygon points="0,5 9,18 -9,18" fill="white" opacity="0.85"/>
-          <polygon points="0,11 5,18 -5,18" fill="#0ea34a"/>
+    <div class="tree-container">
+      <div class="tree-glow-orb"></div>
+      <svg viewBox="0 0 480 480" width="480" height="480" xmlns="http://www.w3.org/2000/svg">
+        <!-- terrain grid -->
+        <path d="M20 420 Q120 385 240 400 Q360 415 460 375" stroke="#00FF9F" stroke-width="1" fill="none" opacity="0.28"/>
+        <path d="M20 438 Q120 405 240 418 Q360 432 460 394" stroke="#00FF9F" stroke-width="0.5" fill="none" opacity="0.18"/>
+        <line x1="70" y1="390" x2="70" y2="460" stroke="#00FF9F" stroke-width="0.4" opacity="0.2"/>
+        <line x1="160" y1="386" x2="160" y2="460" stroke="#00FF9F" stroke-width="0.4" opacity="0.2"/>
+        <line x1="240" y1="384" x2="240" y2="460" stroke="#00FF9F" stroke-width="0.4" opacity="0.2"/>
+        <line x1="320" y1="386" x2="320" y2="460" stroke="#00FF9F" stroke-width="0.4" opacity="0.2"/>
+        <line x1="410" y1="390" x2="410" y2="460" stroke="#00FF9F" stroke-width="0.4" opacity="0.2"/>
+        <!-- base glow -->
+        <ellipse cx="240" cy="415" rx="90" ry="10" fill="#00FF9F" opacity="0.09"/>
+        <!-- TRUNK -->
+        <path d="M222 410 Q226 340 230 270 Q234 200 232 135" stroke="#0a3a1a" stroke-width="24" fill="none" stroke-linecap="round"/>
+        <path d="M258 410 Q254 340 250 270 Q246 200 248 135" stroke="#0a3a1a" stroke-width="18" fill="none" stroke-linecap="round"/>
+        <path d="M240 406 Q240 330 240 255" stroke="#00B074" stroke-width="8" fill="none" stroke-linecap="round" opacity="0.3"/>
+        <!-- roots -->
+        <path d="M230 410 Q210 430 185 438" stroke="#0a3a1a" stroke-width="8" fill="none" stroke-linecap="round" opacity="0.7"/>
+        <path d="M250 410 Q270 430 295 438" stroke="#0a3a1a" stroke-width="8" fill="none" stroke-linecap="round" opacity="0.7"/>
+        <path d="M240 412 Q240 440 240 452" stroke="#0a3a1a" stroke-width="6" fill="none" stroke-linecap="round" opacity="0.5"/>
+        <!-- CANOPY -->
+        <circle cx="240" cy="118" r="100" fill="#071a0c" opacity="0.97"/>
+        <circle cx="155" cy="152" r="72" fill="#071a0c" opacity="0.93"/>
+        <circle cx="325" cy="152" r="72" fill="#071a0c" opacity="0.93"/>
+        <circle cx="185" cy="74" r="62" fill="#040e06"/>
+        <circle cx="295" cy="74" r="62" fill="#040e06"/>
+        <circle cx="240" cy="52" r="56" fill="#030b05"/>
+        <!-- ── GRAVAX TOKEN COINS ── -->
+        <g transform="translate(172,66)">
+          <circle r="30" fill="#00FF9F" opacity="0.85"/>
+          <circle r="25" fill="#00B074"/>
+          <circle r="25" fill="url(#cg1)" opacity="0.3"/>
+          <polygon points="0,-14 12,8 -12,8" fill="white" opacity="0.95"/>
+          <polygon points="0,-6 6,8 -6,8" fill="#00B074"/>
+          <polygon points="0,5 10,20 -10,20" fill="white" opacity="0.85"/>
+          <polygon points="0,12 5,20 -5,20" fill="#00B074"/>
         </g>
-        <g transform="translate(297,72)">
-          <circle r="25" fill="#1cff6b" opacity="0.9"/>
-          <circle r="20" fill="#0ea34a"/>
-          <polygon points="0,-11 9,7 -9,7" fill="white" opacity="0.95"/>
-          <polygon points="0,-4 5,7 -5,7" fill="#0ea34a"/>
-          <polygon points="0,4 7,15 -7,15" fill="white" opacity="0.85"/>
-          <polygon points="0,9 4,15 -4,15" fill="#0ea34a"/>
+        <g transform="translate(308,66)">
+          <circle r="27" fill="#00FF9F" opacity="0.85"/>
+          <circle r="22" fill="#00B074"/>
+          <polygon points="0,-12 10,7 -10,7" fill="white" opacity="0.95"/>
+          <polygon points="0,-5 5,7 -5,7" fill="#00B074"/>
+          <polygon points="0,4 8,17 -8,17" fill="white" opacity="0.85"/>
+          <polygon points="0,10 4,17 -4,17" fill="#00B074"/>
         </g>
-        <g transform="translate(127,142)">
-          <circle r="30" fill="#1cff6b" opacity="0.9"/>
-          <circle r="25" fill="#0ea34a"/>
-          <polygon points="0,-14 12,9 -12,9" fill="white" opacity="0.95"/>
-          <polygon points="0,-5 6,9 -6,9" fill="#0ea34a"/>
-          <polygon points="0,5 10,19 -10,19" fill="white" opacity="0.85"/>
-          <polygon points="0,11 5,19 -5,19" fill="#0ea34a"/>
-        </g>
-        <g transform="translate(230,126)">
-          <circle r="33" fill="#1cff6b" opacity="0.92"/>
-          <circle r="27" fill="#0ea34a"/>
+        <g transform="translate(134,138)">
+          <circle r="32" fill="#00FF9F" opacity="0.88"/>
+          <circle r="27" fill="#00B074"/>
           <polygon points="0,-15 13,9 -13,9" fill="white" opacity="0.95"/>
-          <polygon points="0,-6 7,9 -7,9" fill="#0ea34a"/>
-          <polygon points="0,5 11,20 -11,20" fill="white" opacity="0.85"/>
-          <polygon points="0,12 6,20 -6,20" fill="#0ea34a"/>
+          <polygon points="0,-6 7,9 -7,9" fill="#00B074"/>
+          <polygon points="0,5 11,21 -11,21" fill="white" opacity="0.85"/>
+          <polygon points="0,12 6,21 -6,21" fill="#00B074"/>
         </g>
-        <g transform="translate(333,142)">
-          <circle r="28" fill="#1cff6b" opacity="0.9"/>
-          <circle r="23" fill="#0ea34a"/>
-          <polygon points="0,-13 11,8 -11,8" fill="white" opacity="0.95"/>
-          <polygon points="0,-5 6,8 -6,8" fill="#0ea34a"/>
-          <polygon points="0,5 9,18 -9,18" fill="white" opacity="0.85"/>
-          <polygon points="0,11 5,18 -5,18" fill="#0ea34a"/>
+        <g transform="translate(240,120)">
+          <circle r="36" fill="#00FF9F" opacity="0.9"/>
+          <circle r="30" fill="#00B074"/>
+          <polygon points="0,-17 14,10 -14,10" fill="white" opacity="0.95"/>
+          <polygon points="0,-7 7,10 -7,10" fill="#00B074"/>
+          <polygon points="0,6 12,24 -12,24" fill="white" opacity="0.85"/>
+          <polygon points="0,14 6,24 -6,24" fill="#00B074"/>
         </g>
-        <g transform="translate(160,196)">
-          <circle r="25" fill="#1cff6b" opacity="0.88"/>
-          <circle r="20" fill="#0ea34a"/>
-          <polygon points="0,-11 9,7 -9,7" fill="white" opacity="0.95"/>
-          <polygon points="0,-4 5,7 -5,7" fill="#0ea34a"/>
-          <polygon points="0,3 7,14 -7,14" fill="white" opacity="0.85"/>
-          <polygon points="0,8 4,14 -4,14" fill="#0ea34a"/>
+        <g transform="translate(346,138)">
+          <circle r="30" fill="#00FF9F" opacity="0.88"/>
+          <circle r="25" fill="#00B074"/>
+          <polygon points="0,-14 12,8 -12,8" fill="white" opacity="0.95"/>
+          <polygon points="0,-6 6,8 -6,8" fill="#00B074"/>
+          <polygon points="0,5 10,19 -10,19" fill="white" opacity="0.85"/>
+          <polygon points="0,12 5,19 -5,19" fill="#00B074"/>
         </g>
-        <g transform="translate(298,193)">
-          <circle r="24" fill="#1cff6b" opacity="0.88"/>
-          <circle r="19" fill="#0ea34a"/>
-          <polygon points="0,-11 9,7 -9,7" fill="white" opacity="0.95"/>
-          <polygon points="0,-4 5,7 -5,7" fill="#0ea34a"/>
-          <polygon points="0,3 7,13 -7,13" fill="white" opacity="0.85"/>
-          <polygon points="0,8 4,13 -4,13" fill="#0ea34a"/>
+        <g transform="translate(168,200)">
+          <circle r="27" fill="#00FF9F" opacity="0.85"/>
+          <circle r="22" fill="#00B074"/>
+          <polygon points="0,-12 10,7 -10,7" fill="white" opacity="0.95"/>
+          <polygon points="0,-5 5,7 -5,7" fill="#00B074"/>
+          <polygon points="0,3 8,15 -8,15" fill="white" opacity="0.85"/>
+          <polygon points="0,9 4,15 -4,15" fill="#00B074"/>
         </g>
-        <!-- green apples -->
-        <circle cx="205" cy="154" r="11" fill="#a3e635" opacity="0.9"/>
-        <path d="M205 143 Q210 137 215 141" stroke="#65a30d" stroke-width="1.8" fill="none"/>
-        <circle cx="248" cy="208" r="10" fill="#a3e635" opacity="0.85"/>
-        <path d="M248 198 Q253 192 258 196" stroke="#65a30d" stroke-width="1.6" fill="none"/>
-        <!-- large bottom coin -->
-        <g transform="translate(230,308)">
-          <circle r="42" fill="#1cff6b" opacity="0.14"/>
-          <circle r="35" fill="#1cff6b" opacity="0.9"/>
-          <circle r="29" fill="#0ea34a"/>
-          <polygon points="0,-17 15,10 -15,10" fill="white" opacity="0.95"/>
-          <polygon points="0,-7 8,10 -8,10" fill="#0ea34a"/>
-          <polygon points="0,6 12,23 -12,23" fill="white" opacity="0.85"/>
-          <polygon points="0,13 7,23 -7,23" fill="#0ea34a"/>
+        <g transform="translate(312,197)">
+          <circle r="26" fill="#00FF9F" opacity="0.85"/>
+          <circle r="21" fill="#00B074"/>
+          <polygon points="0,-12 10,7 -10,7" fill="white" opacity="0.95"/>
+          <polygon points="0,-5 5,7 -5,7" fill="#00B074"/>
+          <polygon points="0,3 8,15 -8,15" fill="white" opacity="0.85"/>
+          <polygon points="0,9 4,15 -4,15" fill="#00B074"/>
+        </g>
+        <!-- GREEN APPLES -->
+        <circle cx="213" cy="148" r="12" fill="#a3e635" opacity="0.92"/>
+        <path d="M213 136 Q218 130 224 134" stroke="#65a30d" stroke-width="2" fill="none"/>
+        <circle cx="264" cy="212" r="11" fill="#a3e635" opacity="0.88"/>
+        <path d="M264 201 Q269 195 275 199" stroke="#65a30d" stroke-width="1.8" fill="none"/>
+        <!-- BIG BOTTOM COIN -->
+        <g transform="translate(240,322)">
+          <circle r="46" fill="#00FF9F" opacity="0.1"/>
+          <circle r="38" fill="#00FF9F" opacity="0.88"/>
+          <circle r="31" fill="#00B074"/>
+          <polygon points="0,-18 16,11 -16,11" fill="white" opacity="0.95"/>
+          <polygon points="0,-7 8,11 -8,11" fill="#00B074"/>
+          <polygon points="0,7 13,26 -13,26" fill="white" opacity="0.85"/>
+          <polygon points="0,15 7,26 -7,26" fill="#00B074"/>
         </g>
       </svg>
     </div>
@@ -679,36 +893,36 @@ footer{
 <!-- STATS BAR -->
 <div class="stats-bar">
   <div class="stat-item">
-    <div class="stat-icon">👥</div>
+    <div class="stat-orb">👥</div>
     <div>
       <div class="stat-label">Total Rewards</div>
       <div class="stat-val">1,000,000 GRAV</div>
     </div>
   </div>
   <div class="stat-item">
-    <div class="stat-icon">🎁</div>
+    <div class="stat-orb">🎁</div>
     <div>
       <div class="stat-label">Participants</div>
-      <div class="stat-val white" id="participantCount">—</div>
+      <div class="stat-val w" id="participantCount">—</div>
     </div>
   </div>
   <div class="stat-item">
-    <div class="stat-icon">🔗</div>
+    <div class="stat-orb">🔗</div>
     <div>
       <div class="stat-label">Network</div>
-      <div class="stat-val white">AVALANCHE C-CHAIN</div>
+      <div class="stat-val w">AVALANCHE C-CHAIN</div>
     </div>
   </div>
 </div>
 
 <!-- QUESTS -->
 <section class="quests-section">
-  <div class="quests-header">
-    <div class="q-line"></div>
-    <div class="q-diamond"></div>
-    <span class="q-title-txt">QUESTS</span>
-    <div class="q-diamond"></div>
-    <div class="q-line"></div>
+  <div class="section-header">
+    <div class="s-line"></div>
+    <div class="s-diamond"></div>
+    <span class="section-title">QUESTS</span>
+    <div class="s-diamond"></div>
+    <div class="s-line"></div>
   </div>
   <div class="quest-list" id="questList"></div>
 </section>
@@ -716,20 +930,20 @@ footer{
 <!-- AIRDROP BANNER -->
 <div class="airdrop-banner">
   <div class="ab-glow"></div>
-  <div class="ab-icon">🎁</div>
-  <div class="ab-text">
+  <div class="ab-icon-wrap">🎁</div>
+  <div class="ab-body">
     <p>Complete all quests to be eligible for the</p>
     <strong>GRAVAX AIRDROP!</strong>
   </div>
   <div class="ab-coins">
-    <div class="ab-coin" style="width:48px;height:48px;">
-      <svg viewBox="0 0 100 100" width="30" height="30"><defs><radialGradient id="bc1" cx="38%" cy="32%" r="68%"><stop offset="0%" stop-color="#4ade80"/><stop offset="100%" stop-color="#15803d"/></radialGradient></defs><circle cx="50" cy="50" r="50" fill="url(#bc1)"/><polygon points="50,16 76,65 24,65" fill="white" opacity="0.96"/><polygon points="50,29 69,65 31,65" fill="url(#bc1)"/><polygon points="50,56 66,80 34,80" fill="white" opacity="0.9"/><polygon points="50,65 62,80 38,80" fill="url(#bc1)"/></svg>
+    <div class="ab-coin" style="width:50px;height:50px;">
+      <svg viewBox="0 0 100 100" width="32" height="32"><circle cx="50" cy="50" r="50" fill="#00B074"/><polygon points="50,14 78,67 22,67" fill="white" opacity="0.95"/><polygon points="50,28 70,67 30,67" fill="#00B074"/><polygon points="50,58 66,82 34,82" fill="white" opacity="0.9"/><polygon points="50,67 62,82 38,82" fill="#00B074"/></svg>
     </div>
     <div class="ab-coin" style="width:40px;height:40px;">
-      <svg viewBox="0 0 100 100" width="24" height="24"><defs><radialGradient id="bc2" cx="38%" cy="32%" r="68%"><stop offset="0%" stop-color="#4ade80"/><stop offset="100%" stop-color="#15803d"/></radialGradient></defs><circle cx="50" cy="50" r="50" fill="url(#bc2)"/><polygon points="50,16 76,65 24,65" fill="white" opacity="0.96"/><polygon points="50,29 69,65 31,65" fill="url(#bc2)"/><polygon points="50,56 66,80 34,80" fill="white" opacity="0.9"/><polygon points="50,65 62,80 38,80" fill="url(#bc2)"/></svg>
+      <svg viewBox="0 0 100 100" width="24" height="24"><circle cx="50" cy="50" r="50" fill="#00B074"/><polygon points="50,14 78,67 22,67" fill="white" opacity="0.95"/><polygon points="50,28 70,67 30,67" fill="#00B074"/><polygon points="50,58 66,80 34,80" fill="white" opacity="0.9"/><polygon points="50,67 62,80 38,80" fill="#00B074"/></svg>
     </div>
-    <div class="ab-coin" style="width:32px;height:32px;">
-      <svg viewBox="0 0 100 100" width="18" height="18"><defs><radialGradient id="bc3" cx="38%" cy="32%" r="68%"><stop offset="0%" stop-color="#4ade80"/><stop offset="100%" stop-color="#15803d"/></radialGradient></defs><circle cx="50" cy="50" r="50" fill="url(#bc3)"/><polygon points="50,16 76,65 24,65" fill="white" opacity="0.96"/><polygon points="50,29 69,65 31,65" fill="url(#bc3)"/><polygon points="50,56 66,80 34,80" fill="white" opacity="0.9"/><polygon points="50,65 62,80 38,80" fill="url(#bc3)"/></svg>
+    <div class="ab-coin" style="width:30px;height:30px;">
+      <svg viewBox="0 0 100 100" width="18" height="18"><circle cx="50" cy="50" r="50" fill="#00B074"/><polygon points="50,14 78,67 22,67" fill="white" opacity="0.95"/><polygon points="50,28 70,67 30,67" fill="#00B074"/><polygon points="50,58 66,80 34,80" fill="white" opacity="0.9"/><polygon points="50,67 62,80 38,80" fill="#00B074"/></svg>
     </div>
   </div>
 </div>
@@ -737,8 +951,8 @@ footer{
 <!-- FOOTER -->
 <footer>
   <div class="logo">
-    <div class="logo-icon" style="width:26px;height:26px;">
-      <svg viewBox="0 0 100 100" width="16" height="16"><defs><radialGradient id="fl" cx="38%" cy="32%" r="68%"><stop offset="0%" stop-color="#4ade80"/><stop offset="100%" stop-color="#15803d"/></radialGradient></defs><circle cx="50" cy="50" r="50" fill="url(#fl)"/><polygon points="50,16 76,65 24,65" fill="white" opacity="0.96"/><polygon points="50,29 69,65 31,65" fill="url(#fl)"/><polygon points="50,56 66,80 34,80" fill="white" opacity="0.9"/><polygon points="50,65 62,80 38,80" fill="url(#fl)"/></svg>
+    <div class="logo-mark" style="width:28px;height:28px;">
+      <svg viewBox="0 0 100 100" width="17" height="17"><circle cx="50" cy="50" r="50" fill="rgba(0,0,0,0.3)"/><polygon points="50,14 78,67 22,67" fill="white" opacity="0.96"/><polygon points="50,28 70,67 30,67" fill="rgba(0,176,116,0.8)"/><polygon points="50,58 66,82 34,82" fill="white" opacity="0.9"/><polygon points="50,67 62,82 38,82" fill="rgba(0,176,116,0.8)"/></svg>
     </div>
     <span class="logo-name" style="font-size:15px;">GRAVAX</span>
   </div>
@@ -748,7 +962,7 @@ footer{
     <span>Tokenize</span> 🔺
   </div>
   <div class="footer-icons">
-    <a href="https://x.com/greenavax" target="_blank" class="f-icon" title="X">
+    <a href="https://x.com/greenavax" target="_blank" class="f-icon" title="X / Twitter">
       <svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.73-8.835L1.254 2.25H8.08l4.253 5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
     </a>
     <a href="#" class="f-icon" title="Discord">
@@ -769,10 +983,63 @@ footer{
 <div class="toast" id="toast"><span id="toastMsg"></span></div>
 
 <script>
-/* ── CONFIG ── */
-const QUEST_CONTRACT = "0xA076327BEFd98B550539077295EA7FB4549eda48";
-const TOKEN_CONTRACT = "0xBB370Fdb0c0B9c717ECAbC5949d461F97F64979f";
-const AVAX_CHAIN_ID  = "0xa86a"; // 43114
+/* ══════════════════════════════════
+   CONFIG
+══════════════════════════════════ */
+const QUEST_CA  = "0xA076327BEFd98B550539077295EA7FB4549eda48";
+const TOKEN_CA  = "0xBB370Fdb0c0B9c717ECAbC5949d461F97F64979f";
+const CHAIN_ID  = "0xa86a";
+
+// ── SUPABASE ──
+const SB_URL  = "https://odeezisshsmjzrhpgpwq.supabase.co";
+const SB_KEY  = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9kZWV6aXNzaHNtanpyaHBncHdxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAyNzE1NjgsImV4cCI6MjA5NTg0NzU2OH0.5MBlzCm7DoGNODHcCeosGo-aTEJgkadx0Xw58M2YeNs";
+const SB_HEADERS = {
+  "Content-Type":  "application/json",
+  "apikey":        SB_KEY,
+  "Authorization": "Bearer " + SB_KEY,
+  "Prefer":        "return=representation"
+};
+
+// ── SUPABASE HELPERS ──
+async function sbGet(wallet){
+  const r = await fetch(
+    `${SB_URL}/rest/v1/submissions?wallet_address=eq.${encodeURIComponent(wallet)}&select=*`,
+    { headers: SB_HEADERS }
+  );
+  const d = await r.json();
+  return d[0] || null;
+}
+
+async function sbUpsert(data){
+  await fetch(`${SB_URL}/rest/v1/submissions`, {
+    method:  "POST",
+    headers: { ...SB_HEADERS, "Prefer": "resolution=merge-duplicates,return=representation" },
+    body:    JSON.stringify(data)
+  });
+}
+
+async function sbUpdate(wallet, data){
+  await fetch(
+    `${SB_URL}/rest/v1/submissions?wallet_address=eq.${encodeURIComponent(wallet)}`,
+    { method:"PATCH", headers: SB_HEADERS, body: JSON.stringify(data) }
+  );
+}
+
+async function sbUploadScreenshot(wallet, questNum, file){
+  // upload file to Supabase Storage
+  const ext  = file.name.split(".").pop();
+  const path = `${wallet}_q${questNum}_${Date.now()}.${ext}`;
+  const r = await fetch(
+    `${SB_URL}/storage/v1/object/screenshots/${path}`,
+    {
+      method:  "POST",
+      headers: { "apikey": SB_KEY, "Authorization": "Bearer " + SB_KEY, "Content-Type": file.type },
+      body:    file
+    }
+  );
+  if(!r.ok) throw new Error("Upload failed");
+  return `${SB_URL}/storage/v1/object/public/screenshots/${path}`;
+}
 
 const QUEST_ABI = [
   "function getUserProgress(address) view returns (bool[4])",
@@ -784,233 +1051,435 @@ const TOKEN_ABI = [
   "function decimals() view returns (uint8)"
 ];
 
-/* ── QUEST DATA ── */
+/* ══════════════════════════════════
+   QUEST DEFINITIONS
+══════════════════════════════════ */
 const QUESTS = [
   {
-    id: 0,
-    step: "STEP 1",
-    name: "Follow @greenavax",
-    desc: "Follow our official X (Twitter) account.",
-    reward: 50, xp: 10,
-    btnLabel: "FOLLOW ON X",
-    action: () => window.open("https://x.com/greenavax","_blank"),
-    modal: "follow"
+    id:0, step:"STEP 1",
+    name:"Follow @greenavax",
+    desc:"Follow our official X (Twitter) account.",
+    reward:50, xp:10,
+    btn:"FOLLOW ON X",
+    href:"https://x.com/greenavax",
+    modalType:"follow"
   },
   {
-    id: 1,
-    step: "STEP 2",
-    name: "Connect wallet to Retro 9000",
-    desc: 'Connect your wallet to <a href="https://retro9000.avax.network" target="_blank">https://retro9000.avax.network</a>',
-    reward: 100, xp: 20,
-    btnLabel: "OPEN RETRO 9000",
-    action: () => window.open("https://retro9000.avax.network","_blank"),
-    modal: "retro"
+    id:1, step:"STEP 2",
+    name:"Connect wallet to Retro 9000",
+    desc:'Connect your wallet to <a href="https://retro9000.avax.network" target="_blank">https://retro9000.avax.network</a>',
+    reward:100, xp:20,
+    btn:"UPLOAD PROOF",
+    href:"https://retro9000.avax.network",
+    modalType:"screenshot",
+    questKey:"quest_2_screenshot"
   },
   {
-    id: 2,
-    step: "STEP 3",
-    name: "Link your X account in Retro 9000",
-    desc: "Link your X (Twitter) account in Retro 9000.",
-    reward: 100, xp: 20,
-    btnLabel: "LINK X ACCOUNT",
-    action: () => window.open("https://retro9000.avax.network","_blank"),
-    modal: "linkx"
+    id:2, step:"STEP 3",
+    name:"Link your X account in Retro 9000",
+    desc:"Link your X (Twitter) account in Retro 9000.",
+    reward:100, xp:20,
+    btn:"UPLOAD PROOF",
+    href:"https://retro9000.avax.network",
+    modalType:"screenshot",
+    questKey:"quest_3_screenshot"
   },
   {
-    id: 3,
-    step: "STEP 4",
-    name: "Paste your AVAX C-Chain address",
-    desc: "Submit your AVAX C-Chain wallet address.",
-    reward: 50, xp: 10,
-    btnLabel: "SUBMIT ADDRESS",
-    action: null,
-    modal: "address"
+    id:3, step:"STEP 4",
+    name:"Paste your AVAX C-Chain address",
+    desc:"Submit your AVAX C-Chain wallet address.",
+    reward:50, xp:10,
+    btn:"SUBMIT ADDRESS",
+    href:null,
+    modalType:"address"
   }
 ];
 
-/* ── STATE ── */
+/* ══════════════════════════════════
+   STATE
+══════════════════════════════════ */
 let provider, signer, userAddress;
-let progress = [false,false,false,false];
-let earned = 0;
-
-/* ── READ PROVIDER (no wallet needed) ── */
+let progress    = [false,false,false,false];
+let userRecord  = null; // Supabase row for connected wallet
 const readProvider = new ethers.providers.JsonRpcProvider(
   "https://api.avax.network/ext/bc/C/rpc"
 );
 
-/* ── LOAD PARTICIPANT COUNT ── */
-async function loadParticipants() {
-  try {
-    const c = new ethers.Contract(QUEST_CONTRACT, QUEST_ABI, readProvider);
+/* ══════════════════════════════════
+   PARTICLES
+══════════════════════════════════ */
+(function spawnParticles(){
+  const wrap = document.getElementById("particles");
+  for(let i=0;i<18;i++){
+    const p = document.createElement("div");
+    p.className = "particle";
+    p.style.cssText = `
+      left:${Math.random()*100}%;
+      width:${1+Math.random()*2}px;
+      height:${1+Math.random()*2}px;
+      animation-duration:${8+Math.random()*12}s;
+      animation-delay:${Math.random()*10}s;
+      opacity:${0.3+Math.random()*0.5};
+    `;
+    wrap.appendChild(p);
+  }
+})();
+
+/* ══════════════════════════════════
+   PARTICIPANTS (public, no wallet)
+══════════════════════════════════ */
+async function loadParticipants(){
+  try{
+    const c = new ethers.Contract(QUEST_CA, QUEST_ABI, readProvider);
     const n = await c.participantCount();
     document.getElementById("participantCount").textContent =
       Number(n).toLocaleString();
-  } catch(e) {
+  }catch{
     document.getElementById("participantCount").textContent = "—";
   }
 }
 
-/* ── CONNECT WALLET ── */
-async function connectWallet() {
-  if (!window.ethereum) {
-    showToast("Install MetaMask or Core Wallet first", "err");
+/* ══════════════════════════════════
+   WALLET CONNECT
+══════════════════════════════════ */
+async function connectWallet(){
+  if(!window.ethereum){
+    showToast("Install MetaMask or Core Wallet first","err");
     return;
   }
-  try {
-    await window.ethereum.request({ method: "eth_requestAccounts" });
-    await switchToAvalanche();
+  try{
+    await window.ethereum.request({method:"eth_requestAccounts"});
+    await switchChain();
     provider    = new ethers.providers.Web3Provider(window.ethereum);
     signer      = provider.getSigner();
     userAddress = await signer.getAddress();
 
     const btn = document.getElementById("connectBtn");
-    btn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" width="15" height="15"><rect x="2" y="7" width="20" height="14" rx="2.5"/></svg> ${userAddress.slice(0,6)}…${userAddress.slice(-4)}`;
+    btn.textContent = userAddress.slice(0,6)+"…"+userAddress.slice(-4);
     btn.classList.add("connected");
 
     await loadUserData();
     document.getElementById("walletBar").classList.add("show");
     showToast("Wallet connected ✓");
-  } catch(e) {
-    showToast(e.message || "Connection failed", "err");
+  }catch(e){
+    showToast(e.message||"Connection failed","err");
   }
 }
 
-async function switchToAvalanche() {
-  try {
+async function switchChain(){
+  try{
     await window.ethereum.request({
-      method: "wallet_switchEthereumChain",
-      params: [{ chainId: AVAX_CHAIN_ID }]
+      method:"wallet_switchEthereumChain",
+      params:[{chainId:CHAIN_ID}]
     });
-  } catch(e) {
-    if (e.code === 4902) {
+  }catch(e){
+    if(e.code===4902){
       await window.ethereum.request({
-        method: "wallet_addEthereumChain",
-        params: [{
-          chainId: AVAX_CHAIN_ID,
-          chainName: "Avalanche C-Chain",
-          nativeCurrency: { name:"AVAX", symbol:"AVAX", decimals:18 },
-          rpcUrls: ["https://api.avax.network/ext/bc/C/rpc"],
-          blockExplorerUrls: ["https://snowtrace.io"]
+        method:"wallet_addEthereumChain",
+        params:[{
+          chainId:CHAIN_ID,
+          chainName:"Avalanche C-Chain",
+          nativeCurrency:{name:"AVAX",symbol:"AVAX",decimals:18},
+          rpcUrls:["https://api.avax.network/ext/bc/C/rpc"],
+          blockExplorerUrls:["https://snowtrace.io"]
         }]
       });
     }
   }
 }
 
-/* ── LOAD USER CHAIN DATA ── */
-async function loadUserData() {
-  try {
-    const qc = new ethers.Contract(QUEST_CONTRACT, QUEST_ABI, provider);
-    const tc = new ethers.Contract(TOKEN_CONTRACT, TOKEN_ABI, provider);
-    const [prog, earnedRaw, dec, balRaw] = await Promise.all([
+async function loadUserData(){
+  try{
+    const qc = new ethers.Contract(QUEST_CA, QUEST_ABI, provider);
+    const tc = new ethers.Contract(TOKEN_CA, TOKEN_ABI, provider);
+    const [prog,earnedRaw,dec,balRaw] = await Promise.all([
       qc.getUserProgress(userAddress),
       qc.totalEarned(userAddress),
       tc.decimals(),
       tc.balanceOf(userAddress)
     ]);
     progress = prog.map(Boolean);
-    earned   = Math.round(parseFloat(ethers.utils.formatEther(earnedRaw)));
-    const bal = parseFloat(ethers.utils.formatUnits(balRaw, dec)).toFixed(2);
-    const done = progress.filter(Boolean).length;
+    const earned = Math.round(parseFloat(ethers.utils.formatEther(earnedRaw)));
+    const bal    = parseFloat(ethers.utils.formatUnits(balRaw,dec)).toFixed(2);
 
+    // ── also load Supabase record ──
+    userRecord = await sbGet(userAddress);
+
+    // Merge Supabase state into progress display
+    // quest_1_claimed, quest_2_approved, quest_3_approved, quest_4_done
+    // These supplement on-chain progress for pending states
+    const localDone = [
+      progress[0] || (userRecord?.quest_1_claimed === true),
+      progress[1] || (userRecord?.quest_2_approved === true),
+      progress[2] || (userRecord?.quest_3_approved === true),
+      progress[3] || (userRecord?.quest_4_done === true)
+    ];
+
+    const doneCount = localDone.filter(Boolean).length;
     document.getElementById("wbAddr").textContent   = userAddress.slice(0,6)+"…"+userAddress.slice(-4);
     document.getElementById("wbBal").textContent    = bal+" GRAV";
-    document.getElementById("wbDone").textContent   = done+" / 4";
+    document.getElementById("wbDone").textContent   = doneCount+" / 4";
     document.getElementById("wbEarned").textContent = earned+" GRAV";
+
+    // use merged progress for rendering
+    progress = localDone;
     render();
-  } catch(e) {
-    showToast("Error reading chain data", "err");
+  }catch(e){
+    showToast("Chain read error","err");
   }
 }
 
-/* ── RENDER QUESTS ── */
-function questIconSVG(q, isDone) {
-  if (isDone) return `<svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="#1cff6b" stroke-width="2.8"><polyline points="20 6 9 17 4 12"/></svg>`;
-  if (q.id === 0) return `<svg viewBox="0 0 24 24" width="24" height="24" fill="#1cff6b"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.73-8.835L1.254 2.25H8.08l4.253 5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>`;
-  if (q.id === 1) return `<svg viewBox="0 0 100 100" width="26" height="26"><defs><radialGradient id="qi1" cx="38%" cy="32%" r="68%"><stop offset="0%" stop-color="#4ade80"/><stop offset="100%" stop-color="#15803d"/></radialGradient></defs><circle cx="50" cy="50" r="50" fill="url(#qi1)"/><polygon points="50,16 76,65 24,65" fill="white" opacity="0.96"/><polygon points="50,29 69,65 31,65" fill="url(#qi1)"/><polygon points="50,56 66,80 34,80" fill="white" opacity="0.9"/><polygon points="50,65 62,80 38,80" fill="url(#qi1)"/></svg>`;
-  if (q.id === 2) return `<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="#1cff6b" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>`;
-  return `<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="#1cff6b" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-4 0v2"/></svg>`;
+/* ══════════════════════════════════
+   RENDER QUESTS
+══════════════════════════════════ */
+function questStatus(q){
+  // Returns: "done" | "pending" | "active" | "locked"
+  if(progress[q.id]) return "done";
+  if(q.id>0 && !progress[q.id-1]) return "locked";
+  if(!userAddress) return "locked";
+  if(q.modalType==="screenshot"){
+    const key = q.questKey; // quest_2_screenshot or quest_3_screenshot
+    if(userRecord && userRecord[key]) return "pending"; // uploaded, awaiting approval
+  }
+  if(q.modalType==="follow" && userRecord?.quest_1_claimed) return "pending";
+  return "active";
 }
 
-function render() {
+function statusBadge(status){
+  if(status==="done")    return `<span style="font-size:11px;color:var(--lime);font-weight:700;font-family:var(--mono);">✓ DONE</span>`;
+  if(status==="pending") return `<span style="font-size:11px;color:var(--gold);font-weight:700;font-family:var(--mono);text-shadow:0 0 8px rgba(212,255,77,0.4);">⏳ PENDING REVIEW</span>`;
+  return "";
+}
+function iconSVG(id,done){
+  if(done) return `<svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="#00FF9F" stroke-width="2.8"><polyline points="20 6 9 17 4 12"/></svg>`;
+  const icons = {
+    0:`<svg viewBox="0 0 24 24" width="26" height="26" fill="#00FF9F"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.73-8.835L1.254 2.25H8.08l4.253 5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>`,
+    1:`<svg viewBox="0 0 100 100" width="28" height="28"><circle cx="50" cy="50" r="50" fill="#00B074"/><polygon points="50,14 78,67 22,67" fill="white" opacity="0.96"/><polygon points="50,28 70,67 30,67" fill="#00B074"/><polygon points="50,58 66,82 34,82" fill="white" opacity="0.9"/><polygon points="50,67 62,82 38,82" fill="#00B074"/></svg>`,
+    2:`<svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="#00FF9F" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>`,
+    3:`<svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="#00FF9F" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-4 0v2"/></svg>`
+  };
+  return icons[id];
+}
+
+function render(){
   const list = document.getElementById("questList");
   list.innerHTML = "";
-  QUESTS.forEach((q, i) => {
-    const isDone   = progress[q.id];
-    const isLocked = !userAddress || (i > 0 && !progress[QUESTS[i-1].id]);
+  QUESTS.forEach((q,i)=>{
+    const status   = questStatus(q);
+    const isDone   = status==="done";
+    const isPending= status==="pending";
+    const isLocked = status==="locked";
+
     const card = document.createElement("div");
-    card.className = "quest-card" + (isDone?" done":"") + (isLocked?" locked":"");
+    card.className = "quest-card"+(isDone?" done":"")+(isLocked?" locked":"");
+    if(isPending) card.style.borderColor = "rgba(212,255,77,0.3)";
+
+    // button label
+    let btnLabel = q.btn;
+    let btnClass = "q-btn";
+    if(isDone){   btnLabel="✓ DONE";         btnClass="q-btn done-btn"; }
+    if(isPending){btnLabel="⏳ UNDER REVIEW"; btnClass="q-btn done-btn"; }
 
     card.innerHTML = `
-      <div class="q-icon-box">${questIconSVG(q, isDone)}</div>
-      <div class="q-content">
+      <div class="q-icon">${iconSVG(q.id,isDone)}</div>
+      <div class="q-body">
         <div class="q-name">${q.name}</div>
         <div class="q-desc">${q.desc}</div>
-        <span class="q-step">${q.step}</span>
+        <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+          <span class="q-step">${q.step}</span>
+          ${statusBadge(status)}
+        </div>
       </div>
-      <div class="q-arrow">${isDone ? "✓" : "›"}</div>
+      <div class="q-chevron">${isDone?"✓":isPending?"⏳":"›"}</div>
       <div class="q-reward">
-        <div class="qr-top">REWARD</div>
+        <div class="qr-label">REWARD</div>
         <div class="qr-amount">${q.reward}</div>
         <div class="qr-unit">GRAV</div>
         <div class="qr-xp">XP +${q.xp}</div>
       </div>
-      <button class="q-action-btn${isDone?" done-btn":""}" onclick="event.stopPropagation();${isDone?"":("handleQuest("+q.id+")")}">
-        ${isDone ? "✓ DONE" : q.btnLabel}
+      <button class="${btnClass}" onclick="event.stopPropagation();questClick(${q.id})">
+        ${btnLabel}
       </button>`;
 
-    if (!isDone && !isLocked) {
-      card.onclick = () => handleQuest(q.id);
-    }
+    card.onclick = ()=>questClick(q.id);
     list.appendChild(card);
   });
 }
 
-/* ── QUEST ACTIONS ── */
-function handleQuest(id) {
-  if (!userAddress) { openModal(walletModal()); return; }
-  const modals = {
-    0: `<button class="modal-close" onclick="closeModal()">×</button>
-        <h3>Follow @greenavax on X</h3>
-        <p class="modal-desc">Follow our official X (Twitter) account. Once done, the owner will verify and send 50 GRAV to your wallet on-chain.</p>
-        <a class="ext-link" href="https://x.com/greenavax" target="_blank">
-          <svg viewBox="0 0 24 24" width="16" height="16" fill="#1cff6b"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.73-8.835L1.254 2.25H8.08l4.253 5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
-          Open @greenavax on X
-        </a>
-        <div class="pending-note">⏳ After following, the owner verifies and 50 GRAV is automatically sent to your wallet.</div>`,
-
-    1: `<button class="modal-close" onclick="closeModal()">×</button>
-        <h3>Connect wallet to Retro 9000</h3>
-        <p class="modal-desc">Visit retro9000.avax.network and connect your Avalanche wallet to complete this quest.</p>
-        <a class="ext-link" href="https://retro9000.avax.network" target="_blank">
-          ↗ Open retro9000.avax.network
-        </a>
-        <div class="pending-note">⏳ Owner verifies your on-chain connection and sends 100 GRAV to your wallet.</div>`,
-
-    2: `<button class="modal-close" onclick="closeModal()">×</button>
-        <h3>Link your X account in Retro 9000</h3>
-        <p class="modal-desc">Authorize your X (Twitter) account inside Retro 9000 to complete this quest.</p>
-        <a class="ext-link" href="https://retro9000.avax.network" target="_blank">
-          ↗ Open retro9000.avax.network
-        </a>
-        <div class="pending-note">⏳ Owner verifies your linked X and sends 100 GRAV to your wallet.</div>`,
-
-    3: `<button class="modal-close" onclick="closeModal()">×</button>
-        <h3>Paste your AVAX C-Chain address</h3>
-        <p class="modal-desc">Submit your Avalanche C-Chain wallet address (0x…) to be registered for the airdrop.</p>
-        <input class="addr-input" id="addrInput" placeholder="0x…" maxlength="42"/>
-        <p class="addr-hint">Must start with 0x and be 42 characters long.</p>
-        <div class="modal-actions">
-          <button class="btn-cancel" onclick="closeModal()">Cancel</button>
-          <button class="btn-submit" onclick="submitAddress()">Submit Address</button>
-        </div>
-        <div class="pending-note">⏳ Owner verifies and sends 50 GRAV to your wallet.</div>`
-  };
-  openModal(modals[id]);
+/* ══════════════════════════════════
+   QUEST CLICK HANDLERS
+══════════════════════════════════ */
+function questClick(id){
+  if(!userAddress){ openModal(walletModal()); return; }
+  if(progress[id]){ showToast("Quest already completed ✓"); return; }
+  if(id>0 && !progress[id-1]){ showToast("Complete Step "+id+" first","err"); return; }
+  const q = QUESTS[id];
+  if(q.modalType==="follow")      openModal(followModal());
+  else if(q.modalType==="screenshot") openModal(screenshotModal(q));
+  else if(q.modalType==="address")    openModal(addressModal());
 }
 
-function walletModal() {
-  return `<button class="modal-close" onclick="closeModal()">×</button>
+/* ── QUEST 1 — trust-based follow ── */
+function followModal(){
+  return `
+    <button class="modal-close" onclick="closeModal()">×</button>
+    <h3>Follow @greenavax on X</h3>
+    <p class="modal-desc">Click the button below to open @greenavax on X and follow the account. Come back and confirm once done.</p>
+    <a class="ext-link" href="https://x.com/greenavax" target="_blank" onclick="markFollowReady()">
+      <svg viewBox="0 0 24 24" width="16" height="16" fill="var(--lime)"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.73-8.835L1.254 2.25H8.08l4.253 5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+      Open @greenavax on X
+    </a>
+    <button class="btn-submit" id="confirmFollowBtn" onclick="confirmFollow()" style="width:100%;opacity:0.45;cursor:not-allowed;" disabled>
+      I FOLLOWED — CLAIM 50 GRAV
+    </button>
+    <div class="pending-note" style="margin-top:12px;">⏳ Click the X link above first, then the confirm button will activate.</div>`;
+}
+
+function markFollowReady(){
+  setTimeout(()=>{
+    const btn = document.getElementById("confirmFollowBtn");
+    if(btn){ btn.disabled=false; btn.style.opacity="1"; btn.style.cursor="pointer"; }
+  }, 2000);
+}
+
+async function confirmFollow(){
+  const btn = document.getElementById("confirmFollowBtn");
+  btn.textContent = "Saving…"; btn.disabled = true;
+  try{
+    await sbUpsert({
+      wallet_address:  userAddress,
+      quest_1_claimed: true,
+      updated_at:      new Date().toISOString()
+    });
+    progress[0] = true;
+    closeModal();
+    showToast("Quest 1 complete ✓ — 50 GRAV pending owner approval");
+    render();
+  }catch(e){
+    showToast("Error saving — try again","err");
+    btn.textContent="I FOLLOWED — CLAIM 50 GRAV"; btn.disabled=false;
+  }
+}
+
+/* ── QUESTS 2 & 3 — screenshot upload ── */
+function screenshotModal(q){
+  return `
+    <button class="modal-close" onclick="closeModal()">×</button>
+    <h3>${q.name}</h3>
+    <p class="modal-desc">
+      First visit the link below and complete the task, then upload a screenshot as proof.
+    </p>
+    <a class="ext-link" href="${q.href}" target="_blank">↗ Open retro9000.avax.network</a>
+    <label style="display:block;font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:0.1em;font-weight:700;margin-bottom:8px;font-family:var(--mono);">
+      Upload screenshot proof
+    </label>
+    <div id="dropZone" onclick="document.getElementById('fileInput').click()"
+      style="border:2px dashed rgba(0,255,159,0.25);border-radius:12px;padding:28px;text-align:center;cursor:pointer;transition:all 0.2s;margin-bottom:12px;">
+      <div style="font-size:28px;margin-bottom:8px;">📸</div>
+      <div style="font-size:13px;color:var(--muted);">Click to select screenshot</div>
+      <div style="font-size:10px;color:rgba(74,122,90,0.6);margin-top:4px;">PNG, JPG, WEBP — max 5MB</div>
+    </div>
+    <input type="file" id="fileInput" accept="image/*" style="display:none"
+      onchange="previewFile(this, ${q.id}, '${q.questKey}')"/>
+    <div id="filePreview" style="display:none;margin-bottom:12px;">
+      <img id="previewImg" style="width:100%;border-radius:8px;border:1px solid rgba(0,255,159,0.2);max-height:160px;object-fit:cover;"/>
+      <div id="fileName" style="font-size:11px;color:var(--muted);margin-top:6px;font-family:var(--mono);"></div>
+    </div>
+    <button class="btn-submit" id="uploadBtn" onclick="uploadScreenshot(${q.id},'${q.questKey}')"
+      style="width:100%;opacity:0.45;cursor:not-allowed;" disabled>
+      SUBMIT PROOF
+    </button>
+    <div class="pending-note" style="margin-top:12px;">⏳ Your screenshot will be reviewed. Once approved, <strong style="color:var(--lime)">${q.reward} GRAV</strong> is sent to your wallet.</div>`;
+}
+
+function previewFile(input, questId, questKey){
+  const file = input.files[0];
+  if(!file) return;
+  if(file.size > 5*1024*1024){ showToast("File too large — max 5MB","err"); return; }
+  const reader = new FileReader();
+  reader.onload = e => {
+    document.getElementById("previewImg").src = e.target.result;
+    document.getElementById("fileName").textContent = file.name;
+    document.getElementById("filePreview").style.display = "block";
+    document.getElementById("dropZone").style.borderColor = "rgba(0,255,159,0.5)";
+    const btn = document.getElementById("uploadBtn");
+    btn.disabled=false; btn.style.opacity="1"; btn.style.cursor="pointer";
+  };
+  reader.readAsDataURL(file);
+}
+
+async function uploadScreenshot(questId, questKey){
+  const input = document.getElementById("fileInput");
+  const file  = input?.files[0];
+  if(!file){ showToast("Select a screenshot first","err"); return; }
+  const btn = document.getElementById("uploadBtn");
+  btn.textContent="Uploading…"; btn.disabled=true;
+  try{
+    const url = await sbUploadScreenshot(userAddress, questId+1, file);
+    const updateData = {
+      wallet_address: userAddress,
+      updated_at:     new Date().toISOString()
+    };
+    updateData[questKey] = url;
+    await sbUpsert(updateData);
+    progress[questId] = false; // pending admin approval — not done yet
+    closeModal();
+    showToast("Screenshot uploaded ✓ — pending review");
+    render();
+  }catch(e){
+    showToast("Upload failed — try again","err");
+    btn.textContent="SUBMIT PROOF"; btn.disabled=false;
+  }
+}
+
+/* ── QUEST 4 — C-Chain address ── */
+function addressModal(){
+  // pre-fill if already in Supabase
+  const existing = userRecord?.cchain_address || "";
+  return `
+    <button class="modal-close" onclick="closeModal()">×</button>
+    <h3>Paste your AVAX C-Chain address</h3>
+    <p class="modal-desc">Submit your Avalanche C-Chain wallet address to register for the GRAVAX airdrop.</p>
+    <input class="addr-inp" id="addrInp" placeholder="0x…" maxlength="42" value="${existing}"/>
+    <p class="addr-hint">42 characters · starts with 0x</p>
+    <div class="m-actions">
+      <button class="btn-cancel" onclick="closeModal()">Cancel</button>
+      <button class="btn-submit" onclick="submitAddr()">SUBMIT ADDRESS</button>
+    </div>
+    <div class="pending-note">⏳ Owner verifies and sends <strong style="color:var(--lime)">50 GRAV</strong> to your wallet.</div>`;
+}
+
+async function submitAddr(){
+  const val = document.getElementById("addrInp")?.value?.trim();
+  if(!val||!val.startsWith("0x")||val.length!==42){
+    document.getElementById("addrInp").style.borderColor="#f87171";
+    showToast("Enter a valid 42-char 0x address","err");
+    return;
+  }
+  const btn = document.querySelector("#addrInp + p + div .btn-submit");
+  if(btn){ btn.textContent="Saving…"; btn.disabled=true; }
+  try{
+    await sbUpsert({
+      wallet_address: userAddress,
+      cchain_address: val,
+      quest_4_done:   true,
+      updated_at:     new Date().toISOString()
+    });
+    progress[3] = true;
+    userRecord  = await sbGet(userAddress);
+    closeModal();
+    showToast("C-Chain address saved ✓ — 50 GRAV pending");
+    render();
+  }catch(e){
+    showToast("Error saving — try again","err");
+    if(btn){ btn.textContent="SUBMIT ADDRESS"; btn.disabled=false; }
+  }
+}
+
+/* ── WALLET CONNECT MODAL ── */
+function walletModal(){
+  return `
+    <button class="modal-close" onclick="closeModal()">×</button>
     <h3>Connect your wallet</h3>
     <p class="modal-desc">Connect an Avalanche wallet to start completing quests and earning GRAV.</p>
     <div class="w-opt" onclick="closeModal();connectWallet()">
@@ -1027,58 +1496,32 @@ function walletModal() {
     </div>`;
 }
 
-async function submitAddress() {
-  const val = document.getElementById("addrInput")?.value?.trim();
-  if (!val || !val.startsWith("0x") || val.length !== 42) {
-    document.getElementById("addrInput").style.borderColor = "#f87171";
-    showToast("Enter a valid 42-character 0x address", "err");
-    return;
-  }
-  // Save to Google Sheets via Apps Script
-  try {
-    await fetch(SHEETS_URL, {
-      method:"POST",
-      mode:"no-cors",
-      headers:{"Content-Type":"application/json"},
-      body: JSON.stringify({
-        wallet: userAddress || "unknown",
-        cchain: val,
-        timestamp: new Date().toISOString()
-      })
-    });
-  } catch(e){}
-  closeModal();
-  showToast("Address submitted — awaiting owner verification ⏳");
-}
-
-/* ── GOOGLE SHEETS ENDPOINT ── */
-/* Replace with your Apps Script URL after setup */
-const SHEETS_URL = "PASTE_APPS_SCRIPT_URL_HERE";
-
-/* ── MODAL HELPERS ── */
-function openModal(html) {
+/* ══════════════════════════════════
+   MODAL / TOAST HELPERS
+══════════════════════════════════ */
+function openModal(html){
   document.getElementById("modalBox").innerHTML = html;
   document.getElementById("overlay").classList.add("open");
 }
-function closeModal() {
+function closeModal(){
   document.getElementById("overlay").classList.remove("open");
 }
-document.getElementById("overlay").addEventListener("click", function(e) {
-  if (e.target === this) closeModal();
+document.getElementById("overlay").addEventListener("click",function(e){
+  if(e.target===this) closeModal();
 });
-
-/* ── TOAST ── */
-function showToast(msg, type="") {
+function showToast(msg,type=""){
   const t = document.getElementById("toast");
   document.getElementById("toastMsg").textContent = msg;
-  t.className = "toast" + (type==="err" ? " err" : "");
+  t.className = "toast"+(type==="err"?" err":"");
   t.classList.add("show");
-  setTimeout(() => t.classList.remove("show"), 3500);
+  setTimeout(()=>t.classList.remove("show"),3500);
 }
 
-/* ── INIT ── */
+/* ══════════════════════════════════
+   INIT
+══════════════════════════════════ */
 loadParticipants();
-setInterval(loadParticipants, 30000);
+setInterval(loadParticipants,30000);
 render();
 </script>
 </body>
